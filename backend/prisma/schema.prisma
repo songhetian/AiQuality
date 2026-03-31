@@ -1,0 +1,539 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+// 1. 组织架构管理
+model Platform {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  managerId   String?
+  manager     User?    @relation("PlatformManager", fields: [managerId], references: [id])
+  remark      String?
+  status      Int      @default(1) // 1-启用 0-禁用
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  departments Department[]
+  shops       Shop[]
+  users       User[]       @relation("PlatformUsers")
+  roles       Role[]
+  adapterInterfaces AdapterInterface[]
+  aiKeys      AIKey[]
+}
+
+model Department {
+  id          String   @id @default(uuid())
+  name        String
+  code        String
+  platformId  String
+  platform    Platform @relation(fields: [platformId], references: [id])
+  parentId    String?
+  parent      Department? @relation("DeptHierarchy", fields: [parentId], references: [id])
+  children    Department[] @relation("DeptHierarchy")
+  managerId   String?
+  manager     User?    @relation("DeptManager", fields: [managerId], references: [id])
+  remark      String?
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  shops       Shop[]
+  users       User[]       @relation("DeptUsers")
+  roles       Role[]
+  adapterInterfaces AdapterInterface[]
+  aiKeys      AIKey[]
+  qualityRules QualityRule[]
+  tags        Tag[]
+  keywords    Keyword[]
+}
+
+model Shop {
+  id          String   @id @default(uuid())
+  name        String
+  code        String
+  platformId  String
+  platform    Platform @relation(fields: [platformId], references: [id])
+  deptId      String
+  department  Department @relation(fields: [deptId], references: [id])
+  managerId   String?
+  manager     User?    @relation("ShopManager", fields: [managerId], references: [id])
+  serviceTeam String?
+  remark      String?
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  users       User[]       @relation("ShopUsers")
+  aiKeys      AIKey[]
+  chatSessions ChatSession[]
+}
+
+// 2. 用户与权限管理
+model User {
+  id          String   @id @default(uuid())
+  username    String   @unique
+  password    String
+  phone       String?
+  email       String?
+  platformId  String?
+  platform    Platform? @relation("PlatformUsers", fields: [platformId], references: [id])
+  deptId      String?
+  department  Department? @relation("DeptUsers", fields: [deptId], references: [id])
+  shopId      String?
+  shop        Shop?    @relation("ShopUsers", fields: [shopId], references: [id])
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  roles       Role[]   @relation("UserRoles")
+  
+  // 反向关系
+  managedPlatforms Platform[] @relation("PlatformManager")
+  managedDepts     Department[] @relation("DeptManager")
+  managedShops     Shop[] @relation("ShopManager")
+  qualityInspections QualityInspection[] @relation("Inspector")
+  chatSessions     ChatSession[] @relation("CustomerService")
+  tagRelations     TagRelation[] @relation("Tagger")
+  createdTags      Tag[] @relation("TagCreator")
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  platformId  String?
+  platform    Platform? @relation(fields: [platformId], references: [id])
+  deptId      String?
+  department  Department? @relation(fields: [deptId], references: [id])
+  isSystem    Boolean   @default(false)
+  status      Int       @default(1)
+  createTime  DateTime  @default(now())
+  updateTime  DateTime  @updatedAt
+
+  users       User[]       @relation("UserRoles")
+  permissions Permission[] @relation("RolePermissions")
+}
+
+model Permission {
+  id          String   @id @default(uuid())
+  name        String
+  code        String   @unique
+  parentId    String?
+  description String?
+  type        String   // MENU, BUTTON, API
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  roles       Role[]   @relation("RolePermissions")
+}
+
+// 3. 多平台接口适配
+model AdapterInterface {
+  id          String   @id @default(uuid())
+  name        String
+  type        String   // THIRD_PARTY, SELF_BACKEND
+  url         String
+  method      String   // GET, POST
+  headers     String?  // JSON
+  authParams  String?  // JSON
+  platformId  String
+  platform    Platform @relation(fields: [platformId], references: [id])
+  deptId      String?
+  department  Department? @relation(fields: [deptId], references: [id])
+  enableFakeData Boolean @default(false)
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  mappings    DataMapping[]
+  fakeData    FakeData[]
+  monitors    AdapterMonitor[]
+  chatSessions ChatSession[]
+}
+
+model DataMapping {
+  id               String   @id @default(uuid())
+  interfaceId      String
+  interface        AdapterInterface @relation(fields: [interfaceId], references: [id])
+  thirdPartyFields String   @db.Text
+  systemFields     String   @db.Text
+  formatMapping    String?  @db.Text
+  remark           String?
+  status           Int      @default(1)
+  createTime       DateTime @default(now())
+  updateTime       DateTime @updatedAt
+}
+
+model FakeData {
+  id          String   @id @default(uuid())
+  interfaceId String
+  interface   AdapterInterface @relation(fields: [interfaceId], references: [id])
+  fakeData    String   @db.LongText
+  scene       String?
+  remark      String?
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+}
+
+model AdapterMonitor {
+  id          String   @id @default(uuid())
+  interfaceId String
+  interface   AdapterInterface @relation(fields: [interfaceId], references: [id])
+  responseTime Int     // ms
+  successRate  Float
+  status       String   // ONLINE, OFFLINE
+  createTime   DateTime @default(now())
+}
+
+// 4. AI平台配置与质检
+model AIPlatform {
+  id          String   @id @default(uuid())
+  name        String
+  url         String
+  secretKey   String
+  billingRule String?  // JSON
+  isDefault   Boolean  @default(false)
+  remark      String?
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  aiKeys      AIKey[]
+  billingRules CostBillingRule[]
+}
+
+model AIKey {
+  id           String   @id @default(uuid())
+  aiPlatformId String
+  aiPlatform   AIPlatform @relation(fields: [aiPlatformId], references: [id])
+  platformId   String?
+  platform     Platform?  @relation(fields: [platformId], references: [id])
+  deptId       String?
+  department   Department? @relation(fields: [deptId], references: [id])
+  shopId       String?
+  shop         Shop?      @relation(fields: [shopId], references: [id])
+  secretKey    String
+  status       Int        @default(1)
+  createTime   DateTime   @default(now())
+  updateTime   DateTime   @updatedAt
+}
+
+model QualityRule {
+  id                String   @id @default(uuid())
+  name              String
+  deptId            String?
+  department        Department? @relation(fields: [deptId], references: [id])
+  sensitiveWords    String?  @db.Text
+  violationScenes   String?  @db.Text
+  scoreStandard     String?  @db.Text
+  tagMatchRules     String?  @db.Text
+  status            Int      @default(1)
+  createTime        DateTime @default(now())
+  updateTime        DateTime @updatedAt
+
+  qualityInspections QualityInspection[]
+}
+
+// 5. 聊天记录管理
+model ChatSession {
+  id          String   @id @default(uuid())
+  sessionId   String   @unique
+  platformId  String
+  deptId      String
+  shopId      String
+  shop        Shop     @relation(fields: [shopId], references: [id])
+  userId      String?
+  user        User?    @relation("CustomerService", fields: [userId], references: [id])
+  interfaceId String
+  interface   AdapterInterface @relation(fields: [interfaceId], references: [id])
+  startTime   DateTime
+  endTime     DateTime?
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+
+  records     ChatRecord[]
+  inspection  QualityInspection?
+  lossAnalysis LossAnalysis?
+}
+
+model ChatRecord {
+  id          String   @id @default(uuid())
+  sessionId   String
+  session     ChatSession @relation(fields: [sessionId], references: [id])
+  senderType  String   // CUSTOMER, AGENT, SYSTEM
+  senderId    String?
+  content     String   @db.LongText
+  contentType String   @default("TEXT")
+  sendTime    DateTime
+  vectorId    String?
+  createTime  DateTime @default(now())
+
+  tagRelations TagRelation[]
+}
+
+model QualityInspection {
+  id             String   @id @default(uuid())
+  sessionId      String   @unique
+  session        ChatSession @relation(fields: [sessionId], references: [id])
+  aiScore        Float?
+  aiResult       String?  @db.Text
+  manualScore    Float?
+  manualResult   String?  @db.Text
+  inspectorId    String?
+  inspector      User?    @relation("Inspector", fields: [inspectorId], references: [id])
+  ruleId         String
+  rule           QualityRule @relation(fields: [ruleId], references: [id])
+  status         Int      @default(1)
+  rectifyOpinion String?  @db.Text
+  createTime     DateTime @default(now())
+  updateTime     DateTime @updatedAt
+
+  tagRelations   TagRelation[]
+}
+
+// 6. 标签管理
+model Tag {
+  tagCode        String   @id @default(uuid())
+  tagName        String
+  tagType        String
+  applyDimension String
+  dimensionDetail String
+  deptId         String?
+  department     Department? @relation(fields: [deptId], references: [id])
+  description    String?
+  aiMatchRule    String?  @db.Text
+  status         Int      @default(1)
+  createBy       String
+  creator        User     @relation("TagCreator", fields: [createBy], references: [id])
+  isAiCreate     Int      @default(0)
+  createTime     DateTime @default(now())
+  updateTime     DateTime @updatedAt
+
+  relations      TagRelation[]
+}
+
+model TagRelation {
+  id           String   @id @default(uuid())
+  tagCode      String
+  tag          Tag      @relation(fields: [tagCode], references: [tagCode])
+  qualityId    String?
+  inspection   QualityInspection? @relation(fields: [qualityId], references: [id])
+  recordId     String?
+  record       ChatRecord? @relation(fields: [recordId], references: [id])
+  createBy     String
+  creator      User     @relation("Tagger", fields: [createBy], references: [id])
+  createTime   DateTime @default(now())
+}
+
+model TagAudit {
+  id          String   @id @default(uuid())
+  tagName     String
+  tagType     String   @default("业务类")
+  reason      String   @db.Text
+  status      Int      @default(0) // 0-Pending, 1-Approved, 2-Rejected
+  deptId      String?
+  createTime  DateTime @default(now())
+}
+
+// 7. 知识库与洞察
+model KnowledgeBase {
+  id           String   @id @default(uuid())
+  title        String
+  fileName     String
+  fileUrl      String
+  fileType     String
+  fileHash     String
+  deptId       String?
+  vectorId     String?
+  status       Int      @default(0)
+  errorMessage String?  @db.Text
+  createBy     String
+  createTime   DateTime @default(now())
+  updateTime   DateTime @updatedAt
+
+  @@index([deptId])
+}
+
+model QuestionTag {
+  id          String   @id @default(uuid())
+  name        String
+  color       String?  @default("#64748b")
+  createTime  DateTime @default(now())
+  
+  questions   HighFreqQuestion[]
+}
+
+model HighFreqQuestion {
+  id          String   @id @default(uuid())
+  content     String   @db.Text
+  count       Int      @default(1)
+  productId   String?
+  userId      String?
+  tagId       String?
+  tag         QuestionTag? @relation(fields: [tagId], references: [id])
+  statDate    DateTime
+  createTime  DateTime @default(now())
+}
+
+model LossRule {
+  id           String   @id @default(uuid())
+  name         String
+  waitMinutes  Int      @default(120)
+  platformId   String
+  deptId       String?
+  shopId       String?
+  minCustomerMessages Int @default(1)
+  replyTimeoutMinutes Int?
+  orderWindowMinutes Int?
+  remark       String?
+  status       Int      @default(1)
+  createTime   DateTime @default(now())
+  updateTime   DateTime @updatedAt
+}
+
+model LossAnalysis {
+  id           String   @id @default(uuid())
+  sessionId    String   @unique
+  session      ChatSession @relation(fields: [sessionId], references: [id])
+  platformId   String?
+  deptId       String?
+  shopId       String?
+  interfaceId  String?
+  productId    String?
+  userId       String?
+  reason       String?  @db.Text
+  isLost       Boolean  @default(true)
+  lastSenderType String?
+  customerMessageCount Int @default(0)
+  agentMessageCount Int @default(0)
+  sessionDurationMinutes Int @default(0)
+  inactiveMinutes Int @default(0)
+  waitMinutes  Int      @default(120)
+  confidence   Float?
+  analyzeVersion String @default("v1")
+  followUpStatus Int     @default(0)
+  followUpRemark String? @db.Text
+  followUpBy   String?
+  followUpTime DateTime?
+  createTime   DateTime @default(now())
+  updateTime   DateTime @updatedAt
+}
+
+// 8. 运营管理
+model CostBillingRule {
+  id           String   @id @default(uuid())
+  name         String
+  aiPlatformId String
+  aiPlatform   AIPlatform @relation(fields: [aiPlatformId], references: [id])
+  billingType  String
+  unitPrice    Float
+  platformId   String?
+  deptId       String?
+  status       Int      @default(1)
+  createTime   DateTime @default(now())
+  updateTime   DateTime @updatedAt
+}
+
+model CostStatistics {
+  id           String   @id @default(uuid())
+  platformId   String
+  deptId       String
+  shopId       String
+  aiPlatformId String
+  callCount    Int      @default(0)
+  duration     Int      @default(0)
+  totalCost    Float    @default(0)
+  statDate     DateTime
+  createTime   DateTime @default(now())
+}
+
+model CostApportion {
+  id           String   @id @default(uuid())
+  deptId       String
+  apportionCost Float
+  statMonth    String
+  ruleName     String
+  createTime   DateTime @default(now())
+}
+
+model Keyword {
+  id          String   @id @default(uuid())
+  word        String
+  type        String
+  matchMode   String   @default("CONTAINS")
+  platformId  String?
+  deptId      String?
+  department  Department? @relation(fields: [deptId], references: [id])
+  severity    Int      @default(1)
+  remark      String?
+  status      Int      @default(1)
+  createTime  DateTime @default(now())
+  updateTime  DateTime @updatedAt
+}
+
+model RealtimeAlert {
+  id          String   @id @default(uuid())
+  sessionId   String
+  recordId    String?
+  platformId  String?
+  shopId      String?
+  userId      String?
+  keyword     String
+  matchedText String?
+  alertType   String   @default("KEYWORD")
+  content     String
+  deptId      String
+  status      Int      @default(0)
+  handleRemark String?
+  handleBy    String?
+  handleTime  DateTime?
+  createTime  DateTime @default(now())
+}
+
+model OperationLog {
+  id            String   @id @default(uuid())
+  userId        String?
+  username      String?
+  platformId    String?
+  deptId        String?
+  operation     String
+  actionKind    String?
+  targetType    String?
+  targetId      String?
+  targetCount   Int?
+  method        String
+  path          String
+  params        String?  @db.Text
+  ip            String?
+  status        Int
+  responseTime  Int
+  createTime    DateTime @default(now())
+}
+
+model SystemLog {
+  id          String   @id @default(uuid())
+  level       String
+  module      String
+  message     String   @db.Text
+  stack       String?  @db.LongText
+  createTime  DateTime @default(now())
+}
+
+model SystemConfig {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String   @db.Text
+  remark      String?
+  updateTime  DateTime @updatedAt
+}
