@@ -1,6 +1,7 @@
-import { Injectable, OnModuleInit, OnModuleDestroy, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 import { PrismaMariaDb } from '@prisma/adapter-mariadb';
+import { resolveDatabaseUrl } from '../../database-url';
 
 @Injectable()
 export class PrismaService
@@ -10,11 +11,7 @@ export class PrismaService
   private readonly logger = new Logger(PrismaService.name);
 
   constructor() {
-    const databaseUrl = process.env.DATABASE_URL;
-
-    if (!databaseUrl) {
-      throw new Error('环境变量 DATABASE_URL 未定义，请检查根目录 .env 文件。');
-    }
+    const databaseUrl = resolveDatabaseUrl(process.env);
 
     super({
       adapter: new PrismaMariaDb(databaseUrl),
@@ -38,7 +35,7 @@ export class PrismaService
       await this.$connect();
       console.log('[prisma] MySQL connected');
     } catch (error) {
-      this.logger.error('❌ 数据库连接失败:', error);
+      this.logger.error('数据库连接失败', error);
       throw error;
     }
   }
