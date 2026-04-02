@@ -36,6 +36,7 @@ import { format } from "date-fns";
 import { useAuthStore } from "../../store/authStore";
 import api from "../../lib/axios";
 import type { ChatRecord as VirtualChatRecord } from "../../components/chat/VirtualChatList";
+import { uiTokens } from "../../components/ui/uiTokens";
 
 const API_BASE = "/chat";
 
@@ -368,7 +369,7 @@ export default function ChatPage() {
                     p="md"
                     style={{
                       borderTop: `${rem(1)} solid ${theme.colors.green[2]}`,
-                      backgroundColor: "#fff",
+                      background: uiTokens.background.panel,
                     }}
                   >
                     <Text size="xs" fw={700} c="green.8" mb="xs">

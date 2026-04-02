@@ -20,6 +20,7 @@ import { PageHeader } from "../../components/ui/PageHeader";
 import { CommonTable } from "../../components/table/CommonTable";
 import { LineChart } from "../../components/ui/LineChart";
 import { PieChart } from "../../components/ui/PieChart";
+import { uiTokens } from "../../components/ui/uiTokens";
 import api from "../../lib/axios";
 import type { EChartsOption } from "echarts";
 
@@ -552,7 +553,7 @@ export default function SystemLogPage() {
                   style={{
                     margin: 0,
                     borderRadius: 8,
-                    background: "#f8f9fa",
+                    background: uiTokens.background.surfaceGlow,
                     overflowX: "auto",
                     whiteSpace: "pre-wrap",
                     wordBreak: "break-word",

@@ -23,6 +23,7 @@ import { useQuery } from "@tanstack/react-query";
 import { PageHeader } from "../../components/ui/PageHeader";
 import { EmptyState } from "../../components/ui/EmptyState";
 import { PageAnimate } from "../../components/ui/PageAnimate";
+import { uiTokens } from "../../components/ui/uiTokens";
 import axios from "axios";
 
 type PlatformItem = {
@@ -110,7 +111,7 @@ export default function OrganizationPage() {
                   />
                 ) : (
                   <Table verticalSpacing="sm" highlightOnHover>
-                    <Table.Thead style={{ backgroundColor: "#f8f9fa" }}>
+                    <Table.Thead style={{ background: uiTokens.background.tableHead }}>
                       <Table.Tr>
                         <Table.Th>平台名称</Table.Th>
                         <Table.Th>唯一编码</Table.Th>
@@ -183,7 +184,7 @@ export default function OrganizationPage() {
                   />
                 ) : (
                   <Table verticalSpacing="sm" highlightOnHover>
-                    <Table.Thead style={{ backgroundColor: "#f8f9fa" }}>
+                    <Table.Thead style={{ background: uiTokens.background.tableHead }}>
                       <Table.Tr>
                         <Table.Th>部门名称</Table.Th>
                         <Table.Th>所属平台</Table.Th>

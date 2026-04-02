@@ -18,7 +18,18 @@ export class PrismaService
 
     super({
       adapter: new PrismaMariaDb(databaseUrl),
-      log: ['warn', 'error'],
+      log: [
+        { emit: 'event', level: 'warn' },
+        { emit: 'event', level: 'error' },
+      ],
+    });
+
+    (this as any).$on('warn', (event: { message: string }) => {
+      this.logger.warn(this.translatePrismaLog(event.message));
+    });
+
+    (this as any).$on('error', (event: { message: string }) => {
+      this.logger.error(this.translatePrismaLog(event.message));
     });
   }
 
@@ -34,5 +45,22 @@ export class PrismaService
 
   async onModuleDestroy() {
     await this.$disconnect();
+  }
+
+  private translatePrismaLog(message: string) {
+    const lowered = message.toLowerCase();
+
+    if (
+      lowered.includes('pool timeout') ||
+      lowered.includes('failed to retrieve a connection from pool')
+    ) {
+      return 'Prisma 数据库连接池超时，请检查数据库负载或连接池配置';
+    }
+
+    if (lowered.includes("can't reach database server")) {
+      return 'Prisma 无法连接数据库服务，请检查数据库地址、端口和服务状态';
+    }
+
+    return `Prisma: ${message}`;
   }
 }

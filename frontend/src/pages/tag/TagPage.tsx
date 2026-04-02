@@ -9,6 +9,7 @@ import { IconPlus, IconEdit, IconTrash, IconSearch, IconTags, IconRobot, IconChe
 import { PageHeader } from '../../components/ui/PageHeader';
 import { PageAnimate } from '../../components/ui/PageAnimate';
 import { CommonTable } from '../../components/table/CommonTable';
+import { uiTokens } from '../../components/ui/uiTokens';
 import api from '../../lib/axios';
 import { notifications } from '@mantine/notifications';
 import { useAuthStore } from '../../store/authStore';
@@ -291,7 +292,30 @@ export default function TagPage() {
           </Tabs.List>
 
           <Tabs.Panel value="formal">
-            <Card withBorder radius="md" shadow="sm">
+            <Card
+              withBorder
+              radius="lg"
+              shadow="sm"
+              style={{
+                position: 'relative',
+                overflow: 'hidden',
+                borderColor: uiTokens.colors.border,
+                background:
+                  'radial-gradient(circle at top right, rgba(199, 240, 65, 0.12), transparent 22%), linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,255,248,0.98) 100%)',
+                boxShadow: uiTokens.shadow.panel,
+              }}
+            >
+              <Box
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: rem(120),
+                  height: rem(4),
+                  borderRadius: rem(uiTokens.radius.pill),
+                  background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+                }}
+              />
               <Group mb="md">
                 <TextInput placeholder="搜索正式标签..." leftSection={<IconSearch size={16} />} style={{ flex: 1 }} value={search} onChange={(e) => setSearch(e.currentTarget.value)} />
                 <Select placeholder="类型过滤" data={['违规类', '规范类', '其他类', 'AI发现']} clearable value={tagType} onChange={setTagType} />
@@ -311,7 +335,17 @@ export default function TagPage() {
           </Tabs.Panel>
 
           <Tabs.Panel value="discovery">
-            <Card withBorder radius="md" shadow="sm">
+            <Card
+              withBorder
+              radius="lg"
+              shadow="sm"
+              style={{
+                borderColor: uiTokens.colors.border,
+                background:
+                  'radial-gradient(circle at top right, rgba(199, 240, 65, 0.08), transparent 18%), linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,255,248,0.98) 100%)',
+                boxShadow: uiTokens.shadow.panel,
+              }}
+            >
               <CommonTable data={auditData} columns={discoveryColumns} total={auditData?.length || 0} page={1} pageSize={100} onPageChange={() => {}} loading={auditLoading} emptyIcon={IconRobot} emptyTitle="AI 暂未发现新特征" />
             </Card>
           </Tabs.Panel>

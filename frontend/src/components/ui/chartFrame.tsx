@@ -117,7 +117,7 @@ export function ChartFrame({
       },
       tooltip: {
         trigger: "axis",
-        backgroundColor: "rgba(255, 255, 255, 0.95)",
+        backgroundColor: uiTokens.colors.panelGlass,
         borderColor: uiTokens.colors.border,
         borderWidth: 1,
         textStyle: { color: theme.colors.gray[9] },

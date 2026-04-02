@@ -13,6 +13,7 @@ import {
   Stack,
   Text,
   ThemeIcon,
+  rem,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import type { EChartsOption } from "echarts";
@@ -97,14 +98,19 @@ const statusLabelMap: Record<number, string> = {
 const boardPaperStyle = {
   border: `1px solid ${uiTokens.colors.border}`,
   boxShadow: uiTokens.shadow.panel,
-  background:
-    "radial-gradient(circle at right top, rgba(125, 154, 118, 0.12), transparent 28%), linear-gradient(180deg, rgba(250,252,249,0.98) 0%, rgba(243,247,241,0.98) 100%)",
+  background: uiTokens.background.surfaceHighlight,
 } as const;
 
 const statCardStyle = {
   border: `1px solid ${uiTokens.colors.border}`,
   boxShadow: uiTokens.shadow.soft,
-  background: uiTokens.background.panel,
+  background: uiTokens.background.surfaceHighlight,
+} as const;
+
+const sectionCardStyle = {
+  ...statCardStyle,
+  position: "relative" as const,
+  overflow: "hidden",
 } as const;
 
 const panelTitleStyle = {
@@ -125,24 +131,51 @@ function MetricCard({
   accent: string;
 }) {
   return (
-    <Paper radius="md" p="md" style={{ ...statCardStyle, position: "relative", overflow: "hidden" }}>
+    <Paper radius="xl" p="md" style={{ ...sectionCardStyle }}>
       <Box
         style={{
           position: "absolute",
-          left: 0,
           top: 0,
-          bottom: 0,
-          width: 3,
+          left: 0,
+          width: 88,
+          height: 4,
+          borderRadius: 999,
           background: accent,
         }}
       />
-      <Text size="xs" fw={600} c={uiTokens.colors.textMuted} mb={6}>
-        {label}
-      </Text>
-      <Text fw={800} size="1.55rem" c={uiTokens.colors.heading} lh={1.1}>
-        {value}
-      </Text>
-      <Text size="xs" c={uiTokens.colors.textMuted} mt={8}>
+      <Box
+        style={{
+          position: "absolute",
+          right: -24,
+          top: -24,
+          width: 88,
+          height: 88,
+          borderRadius: "50%",
+          background: uiTokens.background.navOrb,
+        }}
+      />
+      <Group justify="space-between" align="flex-start" mb={18}>
+        <Box>
+          <Text size="xs" fw={700} c={uiTokens.colors.textMuted} mb={6}>
+            {label}
+          </Text>
+          <Text fw={800} size="1.55rem" c={uiTokens.colors.heading} lh={1.1}>
+            {value}
+          </Text>
+        </Box>
+        <Badge
+          radius="xl"
+          variant="filled"
+          style={{
+            background: uiTokens.colors.panel,
+            color: uiTokens.colors.primaryDeep,
+            border: `1px solid ${uiTokens.colors.border}`,
+          }}
+        >
+          今日
+        </Badge>
+      </Group>
+      <Text size="xs" c={uiTokens.colors.textMuted}>
         {helper}
       </Text>
     </Paper>
@@ -230,8 +263,8 @@ export default function DashboardPage() {
             x2: 0,
             y2: 1,
             colorStops: [
-              { offset: 0, color: "rgba(111, 143, 107, 0.24)" },
-              { offset: 1, color: "rgba(111, 143, 107, 0.04)" },
+              { offset: 0, color: "rgba(45, 223, 116, 0.22)" },
+              { offset: 1, color: "rgba(45, 223, 116, 0.03)" },
             ],
           },
         },
@@ -268,6 +301,18 @@ export default function DashboardPage() {
         />
 
         <Paper radius="lg" p="lg" mb="md" style={boardPaperStyle}>
+          <Box
+            style={{
+              position: "absolute",
+              top: rem(-32),
+              right: rem(-12),
+              width: rem(168),
+              height: rem(168),
+              borderRadius: "50%",
+              background: "radial-gradient(circle, rgba(199,240,65,0.18) 0%, rgba(199,240,65,0) 72%)",
+              pointerEvents: "none",
+            }}
+          />
           <Grid align="center">
             <Grid.Col span={{ base: 12, lg: 7 }}>
               <Stack gap={10}>
@@ -280,16 +325,51 @@ export default function DashboardPage() {
                   </Badge>
                 </Group>
                 <Text fw={800} size="1.55rem" c={uiTokens.colors.heading} lh={1.25}>
-                  首页改成更直接的运营看板，优先告诉你风险在哪、队列剩多少、现在该处理什么。
+                  优先看风险抬头、待处理队列和质检执行状态，把首页变成真正能指导动作的运营主屏。
                 </Text>
                 <Text size="sm" c={uiTokens.colors.text} maw={760}>
-                  保留概览页的信息组织，但把视觉重新收回最初的淡绿色基调，用更柔和的卡片、浅绿强调和更轻的背景气氛来承载内容。
+                  这不是展示型总览，而是面向日常值守和复盘的工作台。你能先看到今日风险趋势、处理积压和最新质检动态，再决定接下来优先处理什么。
                 </Text>
+                <Group gap="sm" mt="xs">
+                  <Badge
+                    radius="xl"
+                    variant="filled"
+                    style={{
+                      background: uiTokens.colors.panel,
+                      color: uiTokens.colors.primaryDeep,
+                      border: `1px solid ${uiTokens.colors.border}`,
+                    }}
+                  >
+                    待处理 {pendingCount}
+                  </Badge>
+                  <Badge
+                    radius="xl"
+                    variant="filled"
+                    style={{
+                      background: uiTokens.colors.panel,
+                      color: uiTokens.colors.heading,
+                      border: `1px solid ${uiTokens.colors.border}`,
+                    }}
+                  >
+                    运行中 {runningQueue.length}
+                  </Badge>
+                  <Badge
+                    radius="xl"
+                    variant="filled"
+                    style={{
+                      background: uiTokens.colors.panel,
+                      color: uiTokens.colors.successText,
+                      border: `1px solid ${uiTokens.colors.successBorder}`,
+                    }}
+                  >
+                    已处理 {handledCount}
+                  </Badge>
+                </Group>
               </Stack>
             </Grid.Col>
             <Grid.Col span={{ base: 12, lg: 5 }}>
               <SimpleGrid cols={1} spacing="sm">
-                <Paper radius="md" p="sm" style={statCardStyle}>
+                <Paper radius="md" p="sm" style={sectionCardStyle}>
                   <Group wrap="nowrap" align="flex-start">
                     <ThemeIcon size={34} radius="md" color="green" variant="light">
                       <IconBolt size={18} />
@@ -304,7 +384,7 @@ export default function DashboardPage() {
                     </Box>
                   </Group>
                 </Paper>
-                <Paper radius="md" p="sm" style={statCardStyle}>
+                <Paper radius="md" p="sm" style={sectionCardStyle}>
                   <Group wrap="nowrap" align="flex-start">
                     <ThemeIcon size={34} radius="md" color="green" variant="light">
                       <IconActivity size={18} />
@@ -341,19 +421,30 @@ export default function DashboardPage() {
             label="待处理告警"
             value={pendingCount}
             helper="优先关注未闭环的风险记录"
-            accent="#c59b57"
+            accent={uiTokens.colors.accent}
           />
           <MetricCard
             label="知识资产"
             value={overview?.overview?.knowledgeCount || 0}
             helper="支撑坐席应答和质检判断的知识数"
-            accent="#7c9674"
+            accent={uiTokens.colors.primaryTintStrong}
           />
         </SimpleGrid>
 
         <Grid gutter="md" mb="md">
           <Grid.Col span={{ base: 12, xl: 8 }}>
-            <Card radius="sm" p="lg" style={statCardStyle}>
+            <Card radius="xl" p="lg" style={sectionCardStyle}>
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: rem(120),
+                  height: rem(4),
+                  borderRadius: rem(uiTokens.radius.pill),
+                  background: uiTokens.background.navLine,
+                }}
+              />
               <Group justify="space-between" mb="md">
                 <Box>
                   <Text style={panelTitleStyle}>今日风险趋势</Text>
@@ -375,7 +466,18 @@ export default function DashboardPage() {
             </Card>
           </Grid.Col>
           <Grid.Col span={{ base: 12, xl: 4 }}>
-            <Card radius="md" p="lg" style={statCardStyle}>
+            <Card radius="xl" p="lg" style={sectionCardStyle}>
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: rem(96),
+                  height: rem(4),
+                  borderRadius: rem(uiTokens.radius.pill),
+                  background: `linear-gradient(90deg, ${uiTokens.colors.accent} 0%, ${uiTokens.colors.primary} 100%)`,
+                }}
+              />
               <Group justify="space-between" mb="md">
                 <Box>
                   <Text style={panelTitleStyle}>高频风险词</Text>
@@ -397,14 +499,29 @@ export default function DashboardPage() {
                         key={`${item.name}-${index}`}
                         radius="md"
                         p="sm"
-                        bg={uiTokens.colors.panelSubtle}
-                        withBorder
+                        style={{
+                          background: index === 0 ? uiTokens.background.surfaceGlow : uiTokens.colors.panelSubtle,
+                          border: `1px solid ${uiTokens.colors.border}`,
+                        }}
                       >
                         <Group justify="space-between" mb={8}>
-                          <Text size="sm" fw={600} c={uiTokens.colors.heading}>
-                            {item.name}
-                          </Text>
-                          <Text size="xs" fw={700} c={uiTokens.colors.primaryDeep}>
+                          <Group gap="xs">
+                            <Badge
+                              radius="xl"
+                              variant="filled"
+                              style={{
+                                background: index === 0 ? uiTokens.colors.primaryTintStrong : uiTokens.colors.panel,
+                                color: uiTokens.colors.primaryDeep,
+                                border: `1px solid ${uiTokens.colors.border}`,
+                              }}
+                            >
+                              TOP {index + 1}
+                            </Badge>
+                            <Text size="sm" fw={700} c={uiTokens.colors.heading}>
+                              {item.name}
+                            </Text>
+                          </Group>
+                          <Text size="xs" fw={800} c={uiTokens.colors.primaryDeep}>
                             {item.value}
                           </Text>
                         </Group>
@@ -426,7 +543,18 @@ export default function DashboardPage() {
 
         <Grid gutter="md">
           <Grid.Col span={{ base: 12, xl: 7 }}>
-            <Card radius="md" p="lg" style={statCardStyle}>
+            <Card radius="xl" p="lg" style={sectionCardStyle}>
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: rem(96),
+                  height: rem(4),
+                  borderRadius: rem(uiTokens.radius.pill),
+                  background: uiTokens.background.navLine,
+                }}
+              />
               <Group justify="space-between" mb="md">
                 <Box>
                   <Text style={panelTitleStyle}>待处理事项</Text>
@@ -439,7 +567,7 @@ export default function DashboardPage() {
                 </Badge>
               </Group>
               <Stack gap="sm">
-                <Paper radius="md" p="sm" style={{ background: uiTokens.colors.panelSubtle, border: `1px solid ${uiTokens.colors.border}` }}>
+                <Paper radius="lg" p="sm" style={{ background: uiTokens.background.surfaceGlow, border: `1px solid ${uiTokens.colors.border}` }}>
                   <Group justify="space-between">
                     <Group gap="sm">
                       <ThemeIcon radius="md" color="green" variant="light">
@@ -454,12 +582,12 @@ export default function DashboardPage() {
                         </Text>
                       </Box>
                     </Group>
-                    <Text fw={800} c="#9b7a46">
+                    <Badge radius="xl" variant="filled" color="green">
                       {reviewQueue.length}
-                    </Text>
+                    </Badge>
                   </Group>
                 </Paper>
-                <Paper radius="md" p="sm" style={{ background: uiTokens.colors.panelSubtle, border: `1px solid ${uiTokens.colors.border}` }}>
+                <Paper radius="lg" p="sm" style={{ background: uiTokens.background.surfaceGlow, border: `1px solid ${uiTokens.colors.border}` }}>
                   <Group justify="space-between">
                     <Group gap="sm">
                       <ThemeIcon radius="md" color="green" variant="light">
@@ -474,12 +602,12 @@ export default function DashboardPage() {
                         </Text>
                       </Box>
                     </Group>
-                    <Text fw={800} c={uiTokens.colors.primaryDeep}>
+                    <Badge radius="xl" variant="filled" style={{ background: uiTokens.colors.panel, color: uiTokens.colors.primaryDeep, border: `1px solid ${uiTokens.colors.border}` }}>
                       {runningQueue.length}
-                    </Text>
+                    </Badge>
                   </Group>
                 </Paper>
-                <Paper radius="md" p="sm" style={{ background: uiTokens.colors.panelSubtle, border: `1px solid ${uiTokens.colors.border}` }}>
+                <Paper radius="lg" p="sm" style={{ background: uiTokens.background.surfaceGlow, border: `1px solid ${uiTokens.colors.border}` }}>
                   <Group justify="space-between">
                     <Group gap="sm">
                       <ThemeIcon radius="md" color="green" variant="light">
@@ -494,16 +622,27 @@ export default function DashboardPage() {
                         </Text>
                       </Box>
                     </Group>
-                    <Text fw={800} c={uiTokens.colors.primaryDeep}>
+                    <Badge radius="xl" variant="filled" style={{ background: uiTokens.colors.panel, color: uiTokens.colors.primaryDeep, border: `1px solid ${uiTokens.colors.border}` }}>
                       {overview?.overview?.activeRuleCount || 0}
-                    </Text>
+                    </Badge>
                   </Group>
                 </Paper>
               </Stack>
             </Card>
           </Grid.Col>
           <Grid.Col span={{ base: 12, xl: 5 }}>
-            <Card radius="md" p="lg" style={statCardStyle}>
+            <Card radius="xl" p="lg" style={sectionCardStyle}>
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: rem(110),
+                  height: rem(4),
+                  borderRadius: rem(uiTokens.radius.pill),
+                  background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+                }}
+              />
               <Group justify="space-between" mb="md">
                 <Box>
                   <Text style={panelTitleStyle}>最新质检动态</Text>
@@ -520,9 +659,9 @@ export default function DashboardPage() {
                   latestInspections.map((item) => (
                     <Paper
                       key={item.id}
-                      radius="md"
+                      radius="lg"
                       p="sm"
-                      style={{ background: uiTokens.colors.panelSubtle, border: `1px solid ${uiTokens.colors.border}` }}
+                      style={{ background: uiTokens.background.surfaceGlow, border: `1px solid ${uiTokens.colors.border}` }}
                     >
                       <Group justify="space-between" align="flex-start" wrap="nowrap">
                         <Box>

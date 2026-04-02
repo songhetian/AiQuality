@@ -17,10 +17,13 @@ import {
   TextInput,
   ThemeIcon,
   Title,
+  rem,
 } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
   IconChartBar,
+  IconChecks,
+  IconCircleCheck,
   IconReportSearch,
   IconShieldCheck,
   IconTopologyStar3,
@@ -44,6 +47,7 @@ type LoginResponse = {
 };
 
 type ApiError = {
+  userMessage?: string;
   response?: {
     data?: {
       message?: string;
@@ -67,6 +71,18 @@ const highlights = [
     title: "多角色协同",
     description: "平台配置、部门执行和日志审计共用一套界面语言，切换页面不会出戏。",
   },
+];
+
+const quickFacts = [
+  "规则治理",
+  "实时预警",
+  "日志审计",
+];
+
+const metrics = [
+  { label: "实时质检任务", value: "24", accent: uiTokens.colors.primary },
+  { label: "风险事件回流", value: "08", accent: uiTokens.colors.primaryDeep },
+  { label: "今日处理闭环", value: "96%", accent: uiTokens.colors.primaryTintStrong },
 ];
 
 export default function LoginPage() {
@@ -98,9 +114,13 @@ export default function LoginPage() {
 
       navigate("/");
     } catch (err: unknown) {
+      const resolvedError = err as ApiError | undefined;
       notifications.show({
         title: "登录失败",
-        message: (err as ApiError | undefined)?.response?.data?.message || "账号或密码错误",
+        message:
+          resolvedError?.response?.data?.message ||
+          resolvedError?.userMessage ||
+          "登录失败，请检查账号密码或服务连接状态",
         color: "red",
       });
     } finally {
@@ -112,38 +132,59 @@ export default function LoginPage() {
     <Box
       style={{
         minHeight: "100vh",
-        background: uiTokens.background.hero,
+        background: uiTokens.background.loginShell,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: "24px",
+        padding: "32px 24px",
       }}
     >
-      <Container size={1200} w="100%">
+      <Container size={1100} w="100%">
         <Paper
-          radius="lg"
-          p={{ base: 16, sm: 20, lg: 22 }}
+          radius={24}
+          p={10}
           style={{
             border: `1px solid ${uiTokens.colors.border}`,
-            background: "rgba(255,255,255,0.84)",
-            boxShadow: uiTokens.shadow.panel,
-            backdropFilter: "blur(10px)",
+            background: uiTokens.colors.panelGlass,
+            boxShadow: uiTokens.shadow.elevated,
+            backdropFilter: "blur(18px)",
           }}
         >
-          <SimpleGrid cols={{ base: 1, md: 2 }} spacing={{ base: 18, md: 22 }}>
+          <SimpleGrid cols={{ base: 1, md: 2 }} spacing={10}>
             <Paper
-              radius="lg"
-              p={{ base: 20, md: 24, lg: 28 }}
+              radius={20}
+              p={{ base: 24, md: 32, lg: 38 }}
               style={{
-                border: `1px solid ${uiTokens.colors.border}`,
-                background: uiTokens.background.panelSoft,
+                position: "relative",
+                overflow: "hidden",
+                minHeight: rem(620),
+                border: "none",
+                background: uiTokens.background.loginBrand,
               }}
             >
-              <Group gap="xs" mb="md">
-                <Badge color="green" variant="light">
+              <Box
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  pointerEvents: "none",
+                  background: uiTokens.background.loginBrandOverlay,
+                }}
+              />
+              <Group gap="xs" mb="lg">
+                <Badge
+                  variant="filled"
+                  style={{ background: uiTokens.colors.whiteAlphaBold, color: uiTokens.colors.textOnDark, border: `1px solid ${uiTokens.colors.whiteAlphaStrong}` }}
+                >
                   质检运营平台
                 </Badge>
-                <Badge color="gray" variant="outline">
+                <Badge
+                  variant="filled"
+                  style={{
+                    color: uiTokens.colors.textOnDark,
+                    background: uiTokens.colors.brandAlphaSoft,
+                    border: `1px solid ${uiTokens.colors.brandAlphaBorder}`,
+                  }}
+                >
                   后台系统
                 </Badge>
               </Group>
@@ -151,32 +192,55 @@ export default function LoginPage() {
               <Title
                 order={1}
                 style={{
-                  color: uiTokens.colors.heading,
-                  fontSize: "clamp(2.3rem, 4vw, 3.7rem)",
-                  lineHeight: 1.08,
+                  color: uiTokens.colors.textOnDark,
+                  fontSize: "clamp(2.6rem, 4.6vw, 4.1rem)",
+                  lineHeight: 1.02,
+                  letterSpacing: "-0.04em",
                 }}
               >
                 雷犀质检
               </Title>
+              <Box
+                mt="sm"
+                style={{
+                  width: 132,
+                  height: 10,
+                  borderRadius: 999,
+                  background: uiTokens.background.brandLine,
+                  boxShadow: uiTokens.shadow.loginBrand,
+                }}
+              />
               <Text
                 mt="md"
-                size="md"
-                c={uiTokens.colors.textMuted}
+                size="lg"
+                c={uiTokens.colors.textOnDarkMuted}
                 maw={520}
-                style={{ lineHeight: 1.82 }}
+                style={{ lineHeight: 1.8 }}
               >
-                这是面向业务管理和质检执行的后台系统，所以整体回到更稳、更耐看的界面秩序，用柔和绿色、圆角卡片和清晰层级来支撑日常使用。
+                面向客服质检、风险识别和运营复盘的统一后台，聚焦高频任务、执行追踪与问题闭环。
               </Text>
+              <Group gap="sm" mt="xl">
+                {quickFacts.map((item) => (
+                  <Badge
+                    key={item}
+                    radius="xl"
+                    variant="filled"
+                    style={{
+                      background: uiTokens.colors.whiteAlpha,
+                      color: uiTokens.colors.textOnDark,
+                      border: `1px solid ${uiTokens.colors.whiteAlpha}`,
+                    }}
+                  >
+                    {item}
+                  </Badge>
+                ))}
+              </Group>
 
               <Divider
-                my="lg"
-                color={uiTokens.colors.border}
+                my="xl"
+                color={uiTokens.colors.whiteAlphaStrong}
                 labelPosition="left"
-                label={
-                  <Text size="xs" fw={700} c={uiTokens.colors.textMuted}>
-                    平台能力
-                  </Text>
-                }
+                label={<Text size="xs" fw={700} c={uiTokens.colors.textOnDarkSoft}>核心能力</Text>}
               />
 
               <Stack gap="sm">
@@ -188,20 +252,30 @@ export default function LoginPage() {
                       radius="md"
                       p="md"
                       style={{
-                        border: `1px solid ${uiTokens.colors.border}`,
-                        background: "rgba(255,255,255,0.78)",
-                        boxShadow: uiTokens.shadow.soft,
+                        border: `1px solid ${uiTokens.colors.whiteAlpha}`,
+                        background: uiTokens.colors.whiteAlphaMuted,
+                        boxShadow: "none",
+                        backdropFilter: "blur(8px)",
                       }}
                     >
                       <Group align="flex-start" wrap="nowrap">
-                        <ThemeIcon size={42} radius="md" color="green" variant="light">
-                          <Icon size={22} />
+                        <ThemeIcon
+                          size={42}
+                          radius="xl"
+                          variant="filled"
+                          style={{
+                            background: uiTokens.background.loginMetricIcon,
+                            color: uiTokens.colors.textOnDark,
+                            border: `1px solid ${uiTokens.colors.brandAlphaBorder}`,
+                          }}
+                        >
+                          <Icon size={21} />
                         </ThemeIcon>
                         <Box>
-                          <Text fw={700} c={uiTokens.colors.heading}>
+                          <Text fw={700} c={uiTokens.colors.textOnDark}>
                             {item.title}
                           </Text>
-                          <Text size="sm" c={uiTokens.colors.textMuted} mt={4}>
+                          <Text size="sm" c={uiTokens.colors.textOnDarkMuted} mt={4}>
                             {item.description}
                           </Text>
                         </Box>
@@ -210,117 +284,239 @@ export default function LoginPage() {
                   );
                 })}
               </Stack>
+
+              <Paper
+                radius="xl"
+                p="lg"
+                mt="xl"
+                style={{
+                  border: `1px solid ${uiTokens.colors.whiteAlpha}`,
+                  background: uiTokens.background.loginMetric,
+                  backdropFilter: "blur(10px)",
+                }}
+              >
+                <Group justify="space-between" align="flex-start" mb="md">
+                  <Box>
+                    <Text size="xs" fw={700} c={uiTokens.colors.textOnDarkSoft}>
+                      今日态势
+                    </Text>
+                    <Text fw={800} size="lg" c={uiTokens.colors.textOnDark} mt={4}>
+                      运营控制信号稳定
+                    </Text>
+                  </Box>
+                  <ThemeIcon
+                    radius="xl"
+                    size={42}
+                    variant="filled"
+                    style={{
+                      background: uiTokens.colors.brandAlphaSoft,
+                      color: uiTokens.colors.brandGlowText,
+                      border: `1px solid ${uiTokens.colors.whiteAlphaStrong}`,
+                    }}
+                  >
+                    <IconChartBar size={20} />
+                  </ThemeIcon>
+                </Group>
+
+                <SimpleGrid cols={3} spacing="sm">
+                  {metrics.map((item) => (
+                    <Box
+                      key={item.label}
+                      p="sm"
+                      style={{
+                        borderRadius: rem(16),
+                        background: uiTokens.colors.whiteAlphaSoft,
+                        border: `1px solid ${uiTokens.colors.whiteAlphaMuted}`,
+                      }}
+                    >
+                      <Text size="xs" c={uiTokens.colors.textOnDarkSoft}>
+                        {item.label}
+                      </Text>
+                      <Text fw={800} size="1.5rem" c={item.accent} mt={6} lh={1}>
+                        {item.value}
+                      </Text>
+                    </Box>
+                  ))}
+                </SimpleGrid>
+              </Paper>
             </Paper>
 
             <Paper
-              radius="lg"
-              p={{ base: 24, sm: 30, lg: 34 }}
+              radius={20}
+              p={{ base: 22, sm: 28, lg: 34 }}
               pos="relative"
               style={{
-                border: `1px solid ${uiTokens.colors.border}`,
-                background: uiTokens.background.panel,
-                boxShadow: uiTokens.shadow.panel,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                border: "none",
+                background: uiTokens.background.loginPanel,
               }}
             >
               <LoadingOverlay visible={loading} overlayProps={{ radius: "lg", blur: 2 }} />
 
-              <Box maw={560} mx="auto">
-                <Group justify="space-between" align="flex-start" mb={28}>
-                  <Group gap="sm" align="center" wrap="nowrap">
-                    <ThemeIcon size={48} radius="md" color="green" variant="light">
-                      <IconReportSearch size={24} />
-                    </ThemeIcon>
-                    <Box>
-                      <Title order={2} c={uiTokens.colors.heading}>
-                        欢迎登录
-                      </Title>
-                      <Text size="sm" c={uiTokens.colors.textMuted}>
-                        输入账号和密码，进入统一质检运营后台
-                      </Text>
-                    </Box>
-                  </Group>
-                  <Badge color="green" variant="light">
-                    稳定接入
-                  </Badge>
-                </Group>
-
-                <form onSubmit={handleLogin}>
-                  <Stack gap="lg">
-                    <Group align="center" wrap="nowrap" gap="md">
-                      <Text fw={700} size="sm" c={uiTokens.colors.text} style={{ minWidth: 74, textAlign: "right" }}>
-                        账号
-                      </Text>
-                      <TextInput
-                        placeholder="请输入用户名"
-                        required
-                        size="md"
-                        radius="md"
-                        flex={1}
-                        value={username}
-                        onChange={(e) => setUsername(e.currentTarget.value)}
-                        styles={{
-                          root: { flex: 1 },
-                          input: {
-                            height: 48,
-                            background: uiTokens.colors.panel,
-                            borderColor: uiTokens.colors.borderStrong,
-                          },
+              <Paper
+                radius={20}
+                p={{ base: 22, sm: 24, lg: 28 }}
+                maw={420}
+                w="100%"
+                style={{
+                  border: `1px solid ${uiTokens.colors.border}`,
+                  background: uiTokens.colors.panel,
+                  boxShadow: uiTokens.shadow.cardElevated,
+                }}
+              >
+                <Stack gap="lg">
+                  <Group justify="space-between" align="flex-start">
+                    <Group gap="sm" align="center" wrap="nowrap">
+                      <ThemeIcon
+                        size={48}
+                        radius="xl"
+                        variant="filled"
+                        style={{
+                          background: `linear-gradient(135deg, ${uiTokens.colors.primaryDeeper} 0%, ${uiTokens.colors.primary} 100%)`,
+                          color: uiTokens.colors.whiteSolid,
+                          boxShadow: uiTokens.shadow.success,
                         }}
-                      />
+                      >
+                        <IconReportSearch size={24} />
+                      </ThemeIcon>
+                      <Box>
+                        <Title order={2} c={uiTokens.colors.heading}>
+                          登录后台
+                        </Title>
+                        <Text size="sm" c={uiTokens.colors.textMuted}>
+                          输入账号和密码继续操作
+                        </Text>
+                      </Box>
                     </Group>
-
-                    <Group align="center" wrap="nowrap" gap="md">
-                      <Text fw={700} size="sm" c={uiTokens.colors.text} style={{ minWidth: 74, textAlign: "right" }}>
-                        密码
-                      </Text>
-                      <PasswordInput
-                        placeholder="请输入密码"
-                        required
-                        size="md"
-                        radius="md"
-                        value={password}
-                        onChange={(e) => setPassword(e.currentTarget.value)}
-                        styles={{
-                          root: { flex: 1 },
-                          input: {
-                            height: 48,
-                            background: uiTokens.colors.panel,
-                            borderColor: uiTokens.colors.borderStrong,
-                          },
-                          innerInput: {
-                            height: 48,
-                          },
-                        }}
-                      />
-                    </Group>
-                  </Stack>
-
-                  <Group justify="space-between" mt="lg">
-                    <Checkbox label="记住我" color="green" />
-                    <Anchor component="button" size="sm" c={uiTokens.colors.primaryDeep} type="button">
-                      忘记密码？
-                    </Anchor>
+                    <Badge
+                      variant="filled"
+                      style={{
+                        background: uiTokens.colors.successBg,
+                        color: uiTokens.colors.successText,
+                        border: `1px solid ${uiTokens.colors.successBorder}`,
+                      }}
+                    >
+                      在线
+                    </Badge>
                   </Group>
 
-                  <Button
-                    fullWidth
-                    mt="xl"
-                    type="submit"
-                    color="green"
-                    radius="md"
-                    size="md"
-                    styles={{
-                      root: {
-                        height: 50,
-                        background: "linear-gradient(135deg, #7c9674 0%, #688362 100%)",
-                        boxShadow: "0 14px 28px rgba(103, 128, 99, 0.18)",
-                      },
+                  <Group gap={8}>
+                    <Badge variant="dot" color="green">数据库连接检测</Badge>
+                    <Badge variant="dot" color="green">Redis 缓存检测</Badge>
+                  </Group>
+
+                  <Paper
+                    radius="lg"
+                    p="sm"
+                    style={{
+                      background: uiTokens.colors.panelMuted,
+                      border: `1px solid ${uiTokens.colors.border}`,
                     }}
                   >
-                    立即登录
-                  </Button>
-                </form>
-              </Box>
+                    <Group gap="xs" wrap="nowrap">
+                      <ThemeIcon
+                        radius="xl"
+                        size={30}
+                        variant="filled"
+                        style={{
+                          background: uiTokens.colors.primarySoft,
+                          color: uiTokens.colors.primaryDeeper,
+                        }}
+                      >
+                        <IconCircleCheck size={16} />
+                      </ThemeIcon>
+                      <Box>
+                        <Text size="sm" fw={700} c={uiTokens.colors.heading}>
+                          建议使用管理员账号登录
+                        </Text>
+                        <Text size="xs" c={uiTokens.colors.textMuted}>
+                          登录后可查看数据库、Redis 与接口配置状态
+                        </Text>
+                      </Box>
+                    </Group>
+                  </Paper>
+
+                  <form onSubmit={handleLogin}>
+                    <Stack gap="md">
+                      <Box>
+                        <Text fw={700} size="sm" c={uiTokens.colors.text} mb={8}>
+                          账号
+                        </Text>
+                        <TextInput
+                          placeholder="请输入用户名"
+                          required
+                          size="md"
+                          radius="lg"
+                          value={username}
+                          onChange={(e) => setUsername(e.currentTarget.value)}
+                          styles={{
+                            input: {
+                              height: 50,
+                              background: uiTokens.colors.inputBg,
+                              borderColor: uiTokens.colors.inputBorder,
+                              color: uiTokens.colors.heading,
+                            },
+                          }}
+                        />
+                      </Box>
+
+                      <Box>
+                        <Text fw={700} size="sm" c={uiTokens.colors.text} mb={8}>
+                          密码
+                        </Text>
+                        <PasswordInput
+                          placeholder="请输入密码"
+                          required
+                          size="md"
+                          radius="lg"
+                          value={password}
+                          onChange={(e) => setPassword(e.currentTarget.value)}
+                          styles={{
+                            input: {
+                              height: 50,
+                              background: uiTokens.colors.inputBg,
+                              borderColor: uiTokens.colors.inputBorder,
+                              color: uiTokens.colors.heading,
+                            },
+                            innerInput: {
+                              height: 50,
+                            },
+                          }}
+                        />
+                      </Box>
+
+                      <Group justify="space-between" mt={4}>
+                        <Checkbox label="记住我" color="green" />
+                        <Anchor component="button" size="sm" c={uiTokens.colors.primaryDeeper} type="button">
+                          忘记密码？
+                        </Anchor>
+                      </Group>
+
+                      <Button
+                        fullWidth
+                        mt="sm"
+                        type="submit"
+                        color="green"
+                        radius="xl"
+                        size="md"
+                        leftSection={<IconChecks size={18} />}
+                        styles={{
+                          root: {
+                            height: 52,
+                            background: uiTokens.background.successLine,
+                            color: uiTokens.colors.whiteSolid,
+                            boxShadow: uiTokens.shadow.success,
+                          },
+                        }}
+                      >
+                        立即登录
+                      </Button>
+                    </Stack>
+                  </form>
+                </Stack>
+              </Paper>
             </Paper>
           </SimpleGrid>
         </Paper>

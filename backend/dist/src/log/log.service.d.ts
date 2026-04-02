@@ -31,9 +31,9 @@ export declare class LogService {
         createTime: Date;
     }>;
     createSystemLog(data: Prisma.SystemLogCreateInput): Promise<{
+        level: string;
         id: string;
         createTime: Date;
-        level: string;
         module: string;
         message: string;
         stack: string | null;
@@ -82,9 +82,9 @@ export declare class LogService {
         pageSize: number;
     }>;
     findAllSystemLogs(query: any): Promise<{
+        level: string;
         id: string;
         createTime: Date;
-        level: string;
         module: string;
         message: string;
         stack: string | null;
@@ -92,9 +92,9 @@ export declare class LogService {
     findSystemLogsPage(query: any): Promise<{
         total: number;
         list: {
+            level: string;
             id: string;
             createTime: Date;
-            level: string;
             module: string;
             message: string;
             stack: string | null;

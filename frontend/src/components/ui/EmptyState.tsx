@@ -1,5 +1,5 @@
 import React from "react";
-import { Stack, Text, Center, rem, useMantineTheme } from "@mantine/core";
+import { Stack, Text, Center, rem, useMantineTheme, Box } from "@mantine/core";
 import { uiTokens } from "./uiTokens";
 
 interface IconProps {
@@ -30,13 +30,28 @@ export function EmptyState({
         gap="xs"
         p="xl"
         style={{
+          position: 'relative',
+          overflow: 'hidden',
           minWidth: rem(280),
           borderRadius: rem(uiTokens.radius.lg),
           border: `1px dashed ${uiTokens.colors.borderStrong}`,
-          background: uiTokens.background.panelSoft,
+          background: uiTokens.background.surfaceHighlightSoft,
         }}
       >
-        <Icon size={48} stroke={1.2} color={uiTokens.colors.textMuted} />
+        <Box
+          style={{
+            width: rem(64),
+            height: rem(64),
+            borderRadius: '50%',
+            display: 'grid',
+            placeItems: 'center',
+            background: uiTokens.background.surfaceGlow,
+            border: `1px solid ${uiTokens.colors.border}`,
+            boxShadow: uiTokens.shadow.soft,
+          }}
+        >
+          <Icon size={34} stroke={1.35} color={uiTokens.colors.primaryDeep} />
+        </Box>
         <Text fw={700} c={uiTokens.colors.text}>
           {title}
         </Text>

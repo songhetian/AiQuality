@@ -22,13 +22,26 @@ export function PageHeader({ title, description, rightSection, action, breadcrum
     <Paper
       mb="md"
       p="md"
-      radius="md"
+      radius="lg"
       style={{
+        position: 'relative',
+        overflow: 'hidden',
         border: `1px solid ${uiTokens.colors.border}`,
-        background: uiTokens.background.panel,
+        background: uiTokens.background.surfaceHighlight,
         boxShadow: uiTokens.shadow.panel,
       }}
     >
+      <Box
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: rem(132),
+          height: rem(6),
+          borderRadius: rem(uiTokens.radius.pill),
+          background: uiTokens.background.navLine,
+        }}
+      />
       {items.length > 0 && <Breadcrumbs mb="xs">{items}</Breadcrumbs>}
       <Group justify="space-between" align="flex-start">
         <Box>

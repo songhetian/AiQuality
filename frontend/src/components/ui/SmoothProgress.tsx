@@ -1,4 +1,5 @@
 import { Box, Group, Text, rem, useMantineTheme } from '@mantine/core';
+import { uiTokens } from './uiTokens';
 
 interface SmoothProgressProps {
   value: number; // 0-100
@@ -33,7 +34,7 @@ export function SmoothProgress({ value, height = 12, color, label, subLabel }: S
           borderRadius: rem(height),
           overflow: 'hidden',
           position: 'relative',
-          boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.05)'
+          boxShadow: `inset 0 1px 2px ${uiTokens.colors.border}`
         }}
       >
         <Box
@@ -54,7 +55,7 @@ export function SmoothProgress({ value, height = 12, color, label, subLabel }: S
               left: 0,
               width: '50%',
               height: '100%',
-              background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)',
+              background: `linear-gradient(90deg, transparent, ${uiTokens.colors.panelGlass}, transparent)`,
               transform: 'skewX(-20deg)',
               animation: 'progress-shimmer 1.5s linear infinite',
             }}

@@ -35,6 +35,7 @@ import { PageAnimate } from "../../components/ui/PageAnimate";
 import { VirtualChatList } from "../../components/chat/VirtualChatList";
 import type { ChatRecord as VirtualChatRecord } from "../../components/chat/VirtualChatList";
 import { SmoothProgress } from "../../components/ui/SmoothProgress";
+import { uiTokens } from "../../components/ui/uiTokens";
 import { useSocket } from "../../hooks/useSocket";
 import api from "../../lib/axios";
 import { notifications } from "@mantine/notifications";
@@ -617,10 +618,20 @@ export default function QualityPage() {
 
   const dateBtnStyle = {
     height: rem(44),
-    border: "1px solid #64748b",
+    border: `1px solid ${uiTokens.colors.borderStrong}`,
     padding: `0 ${rem(16)}`,
     fontSize: rem(14),
-    fontWeight: 500,
+    fontWeight: 600,
+    color: uiTokens.colors.text,
+    backgroundColor: uiTokens.colors.panel,
+  };
+
+  const panelCardStyle = {
+    borderColor: uiTokens.colors.border,
+    background: uiTokens.background.surfaceHighlight,
+    boxShadow: uiTokens.shadow.panel,
+    position: "relative" as const,
+    overflow: "hidden",
   };
 
   return (
@@ -665,9 +676,20 @@ export default function QualityPage() {
               withBorder
               mb="md"
               p="md"
-              bg="blue.0"
-              style={{ borderColor: "#d0ebff" }}
+              radius="xl"
+              style={panelCardStyle}
             >
+              <Box
+                style={{
+                  position: "absolute",
+                  top: 0,
+                  left: 0,
+                  width: rem(112),
+                  height: rem(4),
+                  borderRadius: rem(uiTokens.radius.pill),
+                  background: uiTokens.background.navLine,
+                }}
+              />
               <SmoothProgress
                 value={taskProgress.percent}
                 label="AI 批量质检引擎运行中"
@@ -679,7 +701,75 @@ export default function QualityPage() {
           </Box>
         )}
 
-        <Card withBorder radius="md" mb="md" p="md">
+        <Card withBorder radius="xl" mb="md" p="lg" style={panelCardStyle}>
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: rem(104),
+              height: rem(4),
+              borderRadius: rem(uiTokens.radius.pill),
+              background: uiTokens.background.navLine,
+            }}
+          />
+          <Group mb="md" justify="space-between" align="flex-start">
+            <Group gap="sm" align="center">
+              <ThemeIcon color="green" variant="light" radius="md">
+                <IconFilter size={18} />
+              </ThemeIcon>
+              <Box>
+                <Text fw={700} c={uiTokens.colors.heading}>质检筛选</Text>
+                <Text size="sm" c={uiTokens.colors.textMuted}>按状态、规则和时间快速定位需要复核的会话</Text>
+              </Box>
+            </Group>
+            <Group gap="sm" wrap="nowrap">
+              <Badge
+                color={manualReviewOnly ? "orange" : "gray"}
+                variant={manualReviewOnly ? "filled" : "light"}
+                style={{ cursor: "pointer", alignSelf: "center" }}
+                onClick={() => {
+                  setManualReviewOnly((prev) => !prev);
+                  setPage(1);
+                }}
+              >
+                建议人工复核
+              </Badge>
+              <Group gap={0} wrap="nowrap">
+                <UnstyledButton
+                  style={{
+                    ...dateBtnStyle,
+                    borderRadius: `${rem(6)} 0 0 ${rem(6)}`,
+                    background: dateRange === "today" ? uiTokens.background.navItemActive : uiTokens.colors.panel,
+                  }}
+                  onClick={() => setDateRange("today")}
+                >
+                  今天
+                </UnstyledButton>
+                <UnstyledButton
+                  style={{
+                    ...dateBtnStyle,
+                    borderLeft: 0,
+                    borderRight: 0,
+                    background: dateRange === "7d" ? uiTokens.background.navItemActive : uiTokens.colors.panel,
+                  }}
+                  onClick={() => setDateRange("7d")}
+                >
+                  近7天
+                </UnstyledButton>
+                <UnstyledButton
+                  style={{
+                    ...dateBtnStyle,
+                    borderRadius: `0 ${rem(6)} ${rem(6)} 0`,
+                    background: dateRange === "30d" ? uiTokens.background.navItemActive : uiTokens.colors.panel,
+                  }}
+                  onClick={() => setDateRange("30d")}
+                >
+                  近30天
+                </UnstyledButton>
+              </Group>
+            </Group>
+          </Group>
           <Group gap="md" wrap="nowrap" style={{ width: "100%" }}>
             <TextInput
               placeholder="搜索会话ID"
@@ -706,60 +796,27 @@ export default function QualityPage() {
               clearable
               styles={{ root: { flexGrow: 1 } }}
             />
-            <Badge
-              color={manualReviewOnly ? "orange" : "gray"}
-              variant={manualReviewOnly ? "filled" : "light"}
-              style={{ cursor: "pointer", alignSelf: "center" }}
-              onClick={() => {
-                setManualReviewOnly((prev) => !prev);
-                setPage(1);
-              }}
-            >
-              只看建议人工复核
-            </Badge>
             <Select
               placeholder="所属平台"
               data={["平台A", "平台B"]}
               clearable
               styles={{ root: { flexGrow: 1 } }}
             />
-            <Group gap={0} wrap="nowrap">
-              <UnstyledButton
-                style={{
-                  ...dateBtnStyle,
-                  borderRadius: `${rem(6)} 0 0 ${rem(6)}`,
-                  backgroundColor: dateRange === "today" ? "#f1f3f5" : "white",
-                }}
-                onClick={() => setDateRange("today")}
-              >
-                今天
-              </UnstyledButton>
-              <UnstyledButton
-                style={{
-                  ...dateBtnStyle,
-                  borderLeft: 0,
-                  borderRight: 0,
-                  backgroundColor: dateRange === "7d" ? "#f1f3f5" : "white",
-                }}
-                onClick={() => setDateRange("7d")}
-              >
-                近7天
-              </UnstyledButton>
-              <UnstyledButton
-                style={{
-                  ...dateBtnStyle,
-                  borderRadius: `0 ${rem(6)} ${rem(6)} 0`,
-                  backgroundColor: dateRange === "30d" ? "#f1f3f5" : "white",
-                }}
-                onClick={() => setDateRange("30d")}
-              >
-                近30天
-              </UnstyledButton>
-            </Group>
           </Group>
         </Card>
 
-        <Card withBorder radius="md">
+        <Card withBorder radius="xl" style={panelCardStyle}>
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: rem(120),
+              height: rem(4),
+              borderRadius: rem(uiTokens.radius.pill),
+              background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+            }}
+          />
           {selectedIds.length > 0 && (
             <Group mb="md" justify="space-between">
               <Badge color="orange" variant="light">
@@ -800,7 +857,7 @@ export default function QualityPage() {
             <Grid.Col span={7}>
               <Box
                 style={{
-                  border: "1px solid #eee",
+                  border: `1px solid ${uiTokens.colors.border}`,
                   borderRadius: rem(8),
                   overflow: "hidden",
                 }}
@@ -821,7 +878,7 @@ export default function QualityPage() {
                   p="md"
                   radius="md"
                   bg="blue.0"
-                  style={{ borderColor: "#d0ebff" }}
+                  style={{ borderColor: uiTokens.colors.border }}
                 >
                   <Group justify="space-between" mb="xs">
                     <Text size="sm" fw={700} c="blue.9">
@@ -859,7 +916,7 @@ export default function QualityPage() {
                     {detail?.aiResult || "AI 分析中..."}
                   </Text>
                   <Group gap="xs" mt="md">
-                    <IconClipboardText size={15} color="#1c7ed6" />
+                    <IconClipboardText size={15} color={uiTokens.colors.primaryDeeper} />
                     <Text size="xs" c="dimmed">
                       {detail?.manualReviewNeeded
                         ? "这条会话建议人工复核后再决定是否整改。"

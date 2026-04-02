@@ -55,6 +55,17 @@ api.interceptors.response.use(
       useAuthStore.getState().logout();
       window.location.href = '/login';
     }
+
+    if (!error.response) {
+      if (error.code === 'ECONNABORTED') {
+        error.userMessage = '请求超时，请检查后端、数据库或 Redis 服务状态';
+      } else {
+        error.userMessage = '无法连接到服务端，请确认后端服务已启动';
+      }
+    } else if (!error.response?.data?.message && error.response?.status >= 500) {
+      error.userMessage = '服务暂时不可用，请稍后重试';
+    }
+
     return Promise.reject(error);
   }
 );

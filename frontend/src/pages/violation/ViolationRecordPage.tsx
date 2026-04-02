@@ -26,6 +26,7 @@ import { SpotlightCard } from "../../components/ui/SpotlightCard";
 import { VirtualChatList } from "../../components/chat/VirtualChatList";
 import { LineChart } from "../../components/ui/LineChart";
 import { PieChart } from "../../components/ui/PieChart";
+import { uiTokens } from "../../components/ui/uiTokens";
 import api from "../../lib/axios";
 import type { EChartsOption } from "echarts";
 import { useAuthStore } from "../../store/authStore";
@@ -497,10 +498,12 @@ export default function ViolationRecordPage() {
 
   const dateBtnStyle = {
     height: rem(44),
-    border: '1px solid #64748b',
+    border: `1px solid ${uiTokens.colors.borderStrong}`,
     padding: `0 ${rem(16)}`,
     fontSize: rem(14),
-    fontWeight: 500,
+    fontWeight: 600,
+    color: uiTokens.colors.text,
+    backgroundColor: uiTokens.colors.panel,
     transition: 'all 0.2s ease',
   };
 
@@ -576,17 +579,17 @@ export default function ViolationRecordPage() {
               未处理超 24h
             </Badge>
             
-            <Group gap={0} wrap="nowrap" style={{ border: '1px solid #64748b', borderRadius: rem(6), overflow: 'hidden' }}>
+            <Group gap={0} wrap="nowrap" style={{ border: `1px solid ${uiTokens.colors.borderStrong}`, borderRadius: rem(10), overflow: 'hidden' }}>
               <UnstyledButton 
-                style={{ ...dateBtnStyle, border: 'none', backgroundColor: dateRange === 'today' ? '#f1f3f5' : 'white' }}
+                style={{ ...dateBtnStyle, border: 'none', background: dateRange === 'today' ? uiTokens.background.navItemActive : uiTokens.colors.panel }}
                 onClick={() => setDateRange('today')}
               >今天</UnstyledButton>
               <UnstyledButton 
-                style={{ ...dateBtnStyle, border: 'none', borderLeft: '1px solid #64748b', borderRight: '1px solid #64748b', backgroundColor: dateRange === '7d' ? '#f1f3f5' : 'white' }}
+                style={{ ...dateBtnStyle, border: 'none', borderLeft: `1px solid ${uiTokens.colors.borderStrong}`, borderRight: `1px solid ${uiTokens.colors.borderStrong}`, background: dateRange === '7d' ? uiTokens.background.navItemActive : uiTokens.colors.panel }}
                 onClick={() => setDateRange('7d')}
               >近7天</UnstyledButton>
               <UnstyledButton 
-                style={{ ...dateBtnStyle, border: 'none', backgroundColor: dateRange === '30d' ? '#f1f3f5' : 'white' }}
+                style={{ ...dateBtnStyle, border: 'none', background: dateRange === '30d' ? uiTokens.background.navItemActive : uiTokens.colors.panel }}
                 onClick={() => setDateRange('30d')}
               >近30天</UnstyledButton>
             </Group>
@@ -785,7 +788,7 @@ export default function ViolationRecordPage() {
           size="lg"
           radius="md"
         >
-          <Box style={{ border: '1px solid #eee', borderRadius: rem(8), overflow: 'hidden' }}>
+          <Box style={{ border: `1px solid ${uiTokens.colors.border}`, borderRadius: rem(8), overflow: 'hidden' }}>
             <VirtualChatList records={sessionDetail?.records || []} />
           </Box>
         </Modal>

@@ -25,6 +25,7 @@ import { LineChart } from "../../components/ui/LineChart";
 import { PieChart } from "../../components/ui/PieChart";
 import { BarChart } from "../../components/ui/BarChart";
 import { StatsCard } from "../../components/ui/StatsCard";
+import { uiTokens } from "../../components/ui/uiTokens";
 import api from "../../lib/axios";
 import { PageAnimate } from "../../components/ui/PageAnimate";
 
@@ -126,7 +127,7 @@ export default function CostPage() {
         name: "平台成本",
         type: "bar",
         data: platformDistribution.map((item) => item.totalCost || 0),
-        itemStyle: { color: "#40c057", borderRadius: [8, 8, 0, 0] },
+        itemStyle: { color: uiTokens.colors.primaryDeep, borderRadius: [8, 8, 0, 0] },
       },
     ],
   };

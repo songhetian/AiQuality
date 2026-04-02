@@ -35,7 +35,7 @@ const queryClient = new QueryClient();
 
 const theme = createTheme({
   primaryColor: "green",
-  primaryShade: 7,
+  primaryShade: 6,
   defaultRadius: "md",
   fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif",
   fontSizes: {
@@ -58,39 +58,56 @@ const theme = createTheme({
   },
   colors: {
     green: [
-      "#f3f7f1",
-      "#e8efe4",
-      "#d6e2d0",
-      "#c1d2bb",
-      "#a8bf9f",
-      "#8fa987",
-      "#7c9674",
-      "#6f8f6b",
-      "#587455",
-      "#455d43",
+      "#f2fff5",
+      "#e0ffe9",
+      "#c5ffd7",
+      "#9bf8ba",
+      "#68ee95",
+      "#45e47b",
+      "#2ddf74",
+      "#16b95a",
+      "#129449",
+      "#106f39",
     ],
     gray: [
-      "#f8faf7",
-      "#f2f5f0",
-      "#e5ebe2",
-      "#d6dfd2",
-      "#a2afa0",
-      "#728174",
-      "#5b695d",
-      "#455449",
-      "#2f3b31",
-      "#1f2821",
+      "#f7fbf8",
+      "#edf4ef",
+      "#dbe7df",
+      "#c5d4ca",
+      "#92a899",
+      "#6e8476",
+      "#576b5e",
+      "#425146",
+      "#2b372f",
+      "#18211b",
     ],
   },
   components: {
     Button: {
       defaultProps: {
         size: "sm",
-        radius: "md",
+        radius: "xl",
       },
       styles: {
         root: {
           fontWeight: 600,
+          boxShadow: uiTokens.shadow.soft,
+          transition: "transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease",
+        },
+        label: {
+          letterSpacing: "0.01em",
+        },
+      },
+    },
+    ActionIcon: {
+      defaultProps: {
+        radius: "xl",
+        variant: "light",
+      },
+      styles: {
+        root: {
+          border: `1px solid ${uiTokens.colors.border}`,
+          background: "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(243,255,247,0.96) 100%)",
           boxShadow: uiTokens.shadow.soft,
         },
       },
@@ -98,55 +115,59 @@ const theme = createTheme({
     TextInput: {
       defaultProps: {
         size: "sm",
-        radius: "md",
+        radius: "lg",
       },
       styles: {
         input: {
           borderColor: uiTokens.colors.border,
           backgroundColor: uiTokens.colors.panel,
+          minHeight: 42,
         },
       },
     },
     PasswordInput: {
       defaultProps: {
         size: "sm",
-        radius: "md",
+        radius: "lg",
       },
       styles: {
         input: {
           borderColor: uiTokens.colors.border,
           backgroundColor: uiTokens.colors.panel,
+          minHeight: 42,
         },
       },
     },
     Select: {
       defaultProps: {
         size: "sm",
-        radius: "md",
+        radius: "lg",
       },
       styles: {
         input: {
           borderColor: uiTokens.colors.border,
           backgroundColor: uiTokens.colors.panel,
+          minHeight: 42,
         },
       },
     },
     NumberInput: {
       defaultProps: {
         size: "sm",
-        radius: "md",
+        radius: "lg",
       },
       styles: {
         input: {
           borderColor: uiTokens.colors.border,
           backgroundColor: uiTokens.colors.panel,
+          minHeight: 42,
         },
       },
     },
     Textarea: {
       defaultProps: {
         size: "sm",
-        radius: "md",
+        radius: "lg",
       },
       styles: {
         input: {
@@ -163,7 +184,7 @@ const theme = createTheme({
     Card: {
       defaultProps: {
         withBorder: true,
-        radius: "md",
+        radius: "lg",
         shadow: "xs",
       },
       styles: {
@@ -176,7 +197,7 @@ const theme = createTheme({
     },
     Paper: {
       defaultProps: {
-        radius: "md",
+        radius: "lg",
       },
       styles: {
         root: {
@@ -186,12 +207,13 @@ const theme = createTheme({
     },
     Badge: {
       defaultProps: {
-        radius: "md",
+        radius: "xl",
       },
       styles: {
         root: {
           fontWeight: 600,
           letterSpacing: "0.2px",
+          paddingInline: 10,
         },
       },
     },
@@ -201,8 +223,14 @@ const theme = createTheme({
           gap: 8,
         },
         tab: {
-          borderRadius: uiTokens.radius.md,
+          borderRadius: uiTokens.radius.pill,
           fontWeight: 600,
+          paddingInline: 14,
+          background: "rgba(255,255,255,0.72)",
+          border: `1px solid transparent`,
+        },
+        tabLabel: {
+          letterSpacing: "0.01em",
         },
       },
     },
@@ -221,7 +249,7 @@ const theme = createTheme({
     },
     Pagination: {
       defaultProps: {
-        radius: "sm",
+        radius: "xl",
         size: "sm",
       },
     },

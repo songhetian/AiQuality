@@ -34,20 +34,41 @@ export function StatsCard({
   return (
     <Card
       withBorder
-      radius="md"
+      radius="lg"
       p="md"
       shadow="xs"
       style={{
+        position: "relative",
+        overflow: "hidden",
         borderColor: uiTokens.colors.border,
-        background: uiTokens.background.panel,
+        background: uiTokens.background.surfaceHighlight,
         boxShadow: uiTokens.shadow.panel,
       }}
     >
+      <div
+        style={{
+          position: "absolute",
+          inset: "0 auto auto 0",
+          width: 88,
+          height: 4,
+          borderRadius: 999,
+          background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+        }}
+      />
       <Group justify="space-between">
         <Text size="xs" c={uiTokens.colors.textMuted} fw={700} tt="uppercase">
           {title}
         </Text>
-        <ThemeIcon color={color} variant="light" size={36} radius="md">
+        <ThemeIcon
+          color={color}
+          variant="light"
+          size={40}
+          radius="xl"
+          style={{
+            border: `1px solid ${uiTokens.colors.border}`,
+            background: uiTokens.background.surfaceGlow,
+          }}
+        >
           <Icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
         </ThemeIcon>
       </Group>

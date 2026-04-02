@@ -1,15 +1,15 @@
 :root {
-  --text: #556457;
-  --text-h: #243126;
-  --bg: #eef3ec;
-  --border: #d9e3d5;
-  --code-bg: #f6faf4;
-  --accent: #6f8f6b;
-  --accent-bg: rgba(111, 143, 107, 0.12);
-  --accent-border: rgba(111, 143, 107, 0.26);
-  --social-bg: rgba(246, 250, 244, 0.72);
+  --text: #385345;
+  --text-h: #163324;
+  --bg: #f2fff5;
+  --border: #caf4d5;
+  --code-bg: #f4fff7;
+  --accent: #2ddf74;
+  --accent-bg: rgba(45, 223, 116, 0.14);
+  --accent-border: rgba(45, 223, 116, 0.3);
+  --social-bg: rgba(244, 255, 247, 0.8);
   --shadow:
-    rgba(61, 78, 63, 0.08) 0 10px 22px -8px, rgba(61, 78, 63, 0.05) 0 4px 10px -4px;
+    rgba(45, 223, 116, 0.12) 0 12px 28px -10px, rgba(22, 185, 90, 0.08) 0 6px 16px -6px;
 
   --sans: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif;
   --heading: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif;
@@ -43,7 +43,9 @@
 
 body {
   margin: 0;
-  background: linear-gradient(180deg, #f4f7f2 0%, #edf2ea 100%);
+  background:
+    radial-gradient(circle at top left, rgba(125, 247, 103, 0.16), transparent 24%),
+    linear-gradient(180deg, #f8fffa 0%, #effff4 100%);
 }
 
 h1,

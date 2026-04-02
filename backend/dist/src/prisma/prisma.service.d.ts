@@ -5,4 +5,5 @@ export declare class PrismaService extends PrismaClient implements OnModuleInit,
     constructor();
     onModuleInit(): Promise<void>;
     onModuleDestroy(): Promise<void>;
+    private translatePrismaLog;
 }

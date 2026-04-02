@@ -9,6 +9,7 @@ import {
   Badge,
   ActionIcon,
   Text,
+  rem,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { useDebouncedValue } from "@mantine/hooks";
@@ -23,6 +24,7 @@ import { PageHeader } from "../../components/ui/PageHeader";
 import { PageAnimate } from "../../components/ui/PageAnimate";
 import { CommonTable } from "../../components/table/CommonTable";
 import api from "../../lib/axios";
+import { uiTokens } from "../../components/ui/uiTokens";
 
 type PagedResult<T> = {
   list: T[];
@@ -113,7 +115,29 @@ export default function UserPage() {
           }
         />
         
-        <Card withBorder radius="md">
+        <Card
+          withBorder
+          radius="lg"
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            borderColor: uiTokens.colors.border,
+            background:
+              "radial-gradient(circle at top right, rgba(199, 240, 65, 0.12), transparent 22%), linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,255,248,0.98) 100%)",
+            boxShadow: uiTokens.shadow.panel,
+          }}
+        >
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: rem(120),
+              height: rem(4),
+              borderRadius: rem(uiTokens.radius.pill),
+              background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+            }}
+          />
           <Group mb="md">
             <TextInput
               placeholder="搜索用户名/手机号..."

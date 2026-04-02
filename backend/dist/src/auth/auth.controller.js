@@ -26,7 +26,7 @@ let AuthController = class AuthController {
     async login(loginDto) {
         const user = await this.authService.validateUser(loginDto.username, loginDto.password);
         if (!user) {
-            throw new common_1.UnauthorizedException('Invalid credentials');
+            throw new common_1.UnauthorizedException('账号或密码错误');
         }
         return this.authService.login(user);
     }

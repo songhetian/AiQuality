@@ -26,16 +26,17 @@ export function SpotlightCard({ children }: { children: React.ReactNode }) {
           position: 'absolute',
           inset: -1,
           borderRadius: rem(uiTokens.radius.lg),
-          background: `radial-gradient(520px circle at ${mouse.x}px ${mouse.y}px, rgba(125, 154, 118, 0.1), transparent 78%)`,
+          background: `radial-gradient(520px circle at ${mouse.x}px ${mouse.y}px, rgba(45, 223, 116, 0.14), transparent 72%), radial-gradient(360px circle at ${mouse.x}px ${mouse.y}px, rgba(199, 240, 65, 0.08), transparent 68%)`,
         }}
       />
       <Paper
         withBorder
         p="md"
-        radius="md"
+        radius="lg"
         shadow="xs"
         style={{
-          backgroundColor: 'transparent',
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,255,248,0.97) 100%)',
           borderColor: uiTokens.colors.border,
           boxShadow: uiTokens.shadow.panel,
         }}

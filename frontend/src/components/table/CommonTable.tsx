@@ -5,8 +5,8 @@ import {
   Group, 
   Box, 
   Skeleton,
-  useMantineTheme,
   Checkbox,
+  rem,
 } from '@mantine/core';
 import { EmptyState } from '../ui/EmptyState';
 import { uiTokens } from '../ui/uiTokens';
@@ -51,7 +51,6 @@ export function CommonTable<T extends { id?: string | number; tagCode?: string }
   onToggleRow,
   onToggleAll,
 }: CommonTableProps<T>) {
-  const theme = useMantineTheme();
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const rowIds = data
     .map((item, index) => item.id || item.tagCode || index)
@@ -84,9 +83,10 @@ export function CommonTable<T extends { id?: string | number; tagCode?: string }
           <Table.ScrollContainer
             minWidth={800}
             style={{
+              overflow: 'hidden',
               border: `1px solid ${uiTokens.colors.border}`,
-              borderRadius: theme.radius.md,
-              background: uiTokens.colors.panel,
+              borderRadius: rem(uiTokens.radius.lg),
+              background: uiTokens.background.surfaceHighlightSoft,
               boxShadow: uiTokens.shadow.panel,
             }}
           >
@@ -95,15 +95,32 @@ export function CommonTable<T extends { id?: string | number; tagCode?: string }
               highlightOnHover
               withRowBorders
               styles={{
+                table: {
+                  overflow: 'hidden',
+                },
+                thead: {
+                  background: uiTokens.background.tableHead,
+                },
+                th: {
+                  fontSize: 12,
+                  fontWeight: 800,
+                  color: uiTokens.colors.textMuted,
+                  letterSpacing: '0.02em',
+                  textTransform: 'uppercase',
+                  borderBottom: `1px solid ${uiTokens.colors.border}`,
+                },
                 tr: {
-                  transition: "background-color 0.18s ease",
+                  transition: "background-color 0.18s ease, transform 0.18s ease",
                 },
                 tbody: {
                   fontSize: 13,
                 },
+                td: {
+                  borderBottom: `1px solid ${uiTokens.colors.border}`,
+                },
               }}
             >
-              <Table.Thead style={{ backgroundColor: uiTokens.colors.panelSubtle }}>
+              <Table.Thead>
                 <Table.Tr>
                   {selectable && (
                     <Table.Th style={{ width: 48 }}>
@@ -150,7 +167,10 @@ export function CommonTable<T extends { id?: string | number; tagCode?: string }
             </Table>
           </Table.ScrollContainer>
 
-          <Group justify="center" mt="xl">
+          <Group justify="space-between" mt="lg">
+            <Box c={uiTokens.colors.textMuted} fz={13}>
+              共 {total} 条记录
+            </Box>
             <Pagination 
               total={totalPages} 
               value={page} 

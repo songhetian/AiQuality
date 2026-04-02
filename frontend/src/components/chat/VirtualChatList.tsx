@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { Avatar, Box, Group, Paper, SegmentedControl, Text } from '@mantine/core';
+import { uiTokens } from '../ui/uiTokens';
 
 export type ChatStyle = 'wechat' | 'modern' | 'qq';
 
@@ -53,8 +54,8 @@ export function VirtualChatList({
         <span
           key={`${part}-${index}`}
           style={{
-            backgroundColor: '#ffc9c9',
-            color: '#e03131',
+            backgroundColor: uiTokens.colors.dangerSoft,
+            color: uiTokens.colors.dangerText,
             padding: '0 2px',
             borderRadius: 2,
           }}
@@ -69,7 +70,7 @@ export function VirtualChatList({
 
   return (
     <Box style={{ height: 600, display: 'flex', flexDirection: 'column' }}>
-      <Box p="xs" bg="gray.0" style={{ borderBottom: '1px solid #eee' }}>
+      <Box p="xs" bg="gray.0" style={{ borderBottom: `1px solid ${uiTokens.colors.chatDivider}` }}>
         <Group justify="space-between">
           <Text size="xs" fw={700}>
             聊天回顾
@@ -134,7 +135,7 @@ export function VirtualChatList({
                   backgroundColor: isAgent ? currentStyle.agentBg : currentStyle.customerBg,
                   borderRadius: currentStyle.radius,
                   color: isAgent && chatStyle === 'qq' ? 'white' : 'inherit',
-                  border: isAgent ? 'none' : '1px solid #dee2e6',
+                  border: isAgent ? 'none' : `1px solid ${uiTokens.colors.chatBorder}`,
                 }}
               >
                 <Text size="sm">{renderContent(record.content)}</Text>

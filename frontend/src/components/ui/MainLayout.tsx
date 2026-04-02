@@ -12,6 +12,7 @@ import {
   rem,
   ScrollArea,
   Badge,
+  Stack,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useMemo, useState } from "react";
@@ -25,7 +26,8 @@ import {
   IconChartBar,
   IconLogout,
   IconBell,
-  IconTimeline
+  IconTimeline,
+  IconCircleCheck,
 } from "@tabler/icons-react";
 import { useAuthStore } from "../../store/authStore";
 import { uiTokens } from "./uiTokens";
@@ -109,6 +111,9 @@ export function MainLayout() {
     [permissions, roles],
   );
   const [openedGroup, setOpenedGroup] = useState<string | null>(null);
+  const activeItem = filteredNavGroups
+    .flatMap((group) => group.children.map((item) => ({ ...item, group: group.label })))
+    .find((item) => item.link === location.pathname);
 
   useEffect(() => {
     const activeGroup = filteredNavGroups.find((group) =>
@@ -128,7 +133,7 @@ export function MainLayout() {
     <AppShell
       header={{ height: 58 }}
       navbar={{
-        width: 252,
+        width: 278,
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
@@ -142,26 +147,37 @@ export function MainLayout() {
       <AppShell.Header
         style={{
           borderBottom: `${rem(1)} solid ${uiTokens.colors.border}`,
-          background: "rgba(250, 252, 249, 0.92)",
-          backdropFilter: "blur(10px)",
+          background: uiTokens.colors.navPanelGlass,
+          backdropFilter: "blur(18px)",
         }}
       >
         <Group h="100%" px="md" justify="space-between">
-          <Group>
+          <Group gap="md">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Box style={{ display: "flex", alignItems: "center", gap: rem(8) }}>
+            <Box
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: rem(10),
+                padding: `${rem(6)} ${rem(10)}`,
+                borderRadius: rem(18),
+                background: uiTokens.background.surfaceGlow,
+                border: `1px solid ${uiTokens.colors.border}`,
+                boxShadow: uiTokens.shadow.soft,
+              }}
+            >
               <Box
                 style={{
-                  width: rem(34),
-                  height: rem(34),
-                  borderRadius: rem(uiTokens.radius.md),
+                  width: rem(38),
+                  height: rem(38),
+                  borderRadius: rem(14),
                   display: "grid",
                   placeItems: "center",
-                  background: "linear-gradient(135deg, #7d9b75 0%, #688362 100%)",
+                  background: `linear-gradient(135deg, ${uiTokens.colors.primaryDeeper} 0%, ${uiTokens.colors.primary} 100%)`,
                   boxShadow: uiTokens.shadow.soft,
                 }}
               >
-                <IconReportSearch size={18} color="#ffffff" />
+                <IconReportSearch size={19} color={uiTokens.colors.whiteSolid} />
               </Box>
               <Box>
                 <Title order={4} fw={800} c={uiTokens.colors.heading}>
@@ -172,18 +188,40 @@ export function MainLayout() {
                 </Text>
               </Box>
             </Box>
+            <Box visibleFrom="md">
+              <Text size="11px" fw={700} c={uiTokens.colors.textMuted}>
+                {activeItem?.group || "控制台"}
+              </Text>
+              <Text size="sm" fw={700} c={uiTokens.colors.heading}>
+                {activeItem?.label || "控制台概览"}
+              </Text>
+            </Box>
           </Group>
 
           <Group gap="md">
+            <Badge
+              visibleFrom="md"
+              radius="xl"
+              variant="filled"
+              leftSection={<IconCircleCheck size={12} />}
+              style={{
+                background: uiTokens.colors.successBg,
+                color: uiTokens.colors.successText,
+                border: `1px solid ${uiTokens.colors.successBorder}`,
+              }}
+            >
+              系统在线
+            </Badge>
             <UnstyledButton
               style={{
                 width: rem(34),
                 height: rem(34),
-                borderRadius: rem(uiTokens.radius.md),
+                borderRadius: rem(uiTokens.radius.pill),
                 display: "grid",
                 placeItems: "center",
                 background: uiTokens.colors.panelMuted,
                 border: `1px solid ${uiTokens.colors.border}`,
+                boxShadow: uiTokens.shadow.soft,
               }}
             >
               <IconBell size={18} color={uiTokens.colors.textMuted} />
@@ -191,18 +229,19 @@ export function MainLayout() {
             <Menu shadow="md" width={180} position="bottom-end">
               <Menu.Target>
                 <UnstyledButton style={{
-                    padding: `${rem(4)} ${rem(10)}`,
-                    borderRadius: rem(uiTokens.radius.md),
-                    backgroundColor: uiTokens.colors.panelMuted,
+                    padding: `${rem(5)} ${rem(10)}`,
+                    borderRadius: rem(18),
+                    background: uiTokens.background.surfaceGlow,
                     border: `${rem(1)} solid ${uiTokens.colors.border}`,
+                    boxShadow: uiTokens.shadow.soft,
                   }}>
                   <Group gap="sm">
                     <Avatar
                       size={28}
                       radius="xl"
                       style={{
-                        background: "linear-gradient(135deg, #7d9b75 0%, #688362 100%)",
-                        color: "#fff",
+                        background: `linear-gradient(135deg, ${uiTokens.colors.primaryDeeper} 0%, ${uiTokens.colors.primary} 100%)`,
+                        color: uiTokens.colors.whiteSolid,
                       }}
                     >
                       {user?.username?.[0]?.toUpperCase() || "A"}
@@ -232,112 +271,181 @@ export function MainLayout() {
           background: uiTokens.background.nav,
           borderRight: `${rem(1)} solid ${uiTokens.colors.border}`,
           boxShadow: uiTokens.shadow.nav,
+          overflow: "hidden",
         }}
       >
         <AppShell.Section mb="sm">
           <Box
             p="sm"
             style={{
-              borderRadius: rem(uiTokens.radius.lg),
-              background: "rgba(255,255,255,0.82)",
+              position: "relative",
+              overflow: "hidden",
+              borderRadius: rem(22),
+              background: uiTokens.background.navCard,
               border: `1px solid ${uiTokens.colors.border}`,
               boxShadow: uiTokens.shadow.soft,
             }}
           >
-            <Group justify="space-between" align="center">
-              <Box>
+            <Group justify="space-between" align="flex-start">
+              <Box style={{ position: "relative", zIndex: 1 }}>
                 <Text size="11px" fw={700} c={uiTokens.colors.textMuted}>
                   导航中心
                 </Text>
                 <Text size="sm" fw={700} c={uiTokens.colors.heading} mt={2}>
                   业务控制台
                 </Text>
+                <Text size="11px" c={uiTokens.colors.textMuted} mt={6}>
+                  聚焦高频操作与关键模块
+                </Text>
               </Box>
-              <Badge color="green" variant="light">
+              <Badge color="green" variant="filled" radius="xl">
                 {filteredNavGroups.length} 组
               </Badge>
             </Group>
+            <Box
+              style={{
+                marginTop: rem(12),
+                width: rem(96),
+                height: rem(6),
+                borderRadius: rem(uiTokens.radius.pill),
+                background: uiTokens.background.navLine,
+              }}
+            />
+            <Box
+              style={{
+                position: "absolute",
+                right: rem(-18),
+                bottom: rem(-26),
+                width: rem(96),
+                height: rem(96),
+                borderRadius: "50%",
+                background: uiTokens.background.navOrb,
+              }}
+            />
           </Box>
         </AppShell.Section>
         <AppShell.Section grow component={ScrollArea} scrollbarSize={6}>
-          {filteredNavGroups.map((group) => (
-            <NavLink
-              key={group.label}
-              label={group.label}
-              leftSection={<group.icon size="1rem" stroke={1.6} />}
-              childrenOffset={12}
-              opened={openedGroup === group.label}
-              onClick={() =>
-                setOpenedGroup((current) =>
-                  current === group.label ? null : group.label,
-                )
-              }
-              variant="filled"
-              color="green"
-              mb={rem(4)}
-              styles={{
-                root: {
-                  borderRadius: rem(uiTokens.radius.md),
-                  fontWeight: 600,
-                  minHeight: rem(40),
-                  backgroundColor:
-                    openedGroup === group.label
-                      ? uiTokens.colors.navActive
-                      : "transparent",
-                  color: uiTokens.colors.heading,
-                  border: openedGroup === group.label
-                    ? `1px solid ${uiTokens.colors.borderStrong}`
-                    : "1px solid transparent",
-                },
-                label: { fontSize: rem(13), color: uiTokens.colors.heading },
-                section: { color: uiTokens.colors.textMuted },
-                body: { overflow: "hidden" },
-                children: { paddingTop: rem(4), gap: rem(2) },
-                chevron: { color: uiTokens.colors.textMuted },
-              }}
-            >
-              {group.children.map((item) => (
+          <Stack gap={8}>
+            {filteredNavGroups.map((group) => {
+              const isOpened = openedGroup === group.label;
+
+              return (
                 <NavLink
-                  key={item.link}
-                  label={item.label}
-                  active={location.pathname === item.link}
-                  onClick={() => navigate(item.link)}
+                  key={group.label}
+                  label={group.label}
+                  description={`${group.children.length} 个页面`}
+                  leftSection={
+                    <Box
+                      style={{
+                        width: rem(28),
+                        height: rem(28),
+                        borderRadius: rem(10),
+                        display: "grid",
+                        placeItems: "center",
+                        background: isOpened
+                          ? uiTokens.background.navSectionOpen
+                          : uiTokens.colors.navIconIdle,
+                        border: `1px solid ${isOpened ? uiTokens.colors.navIconBorderActive : uiTokens.colors.border}`,
+                      }}
+                    >
+                      <group.icon
+                        size="1rem"
+                        stroke={1.8}
+                        color={isOpened ? uiTokens.colors.primaryDeep : uiTokens.colors.textMuted}
+                      />
+                    </Box>
+                  }
+                  childrenOffset={12}
+                  opened={isOpened}
+                  onClick={() =>
+                    setOpenedGroup((current) =>
+                      current === group.label ? null : group.label,
+                    )
+                  }
                   variant="subtle"
                   color="green"
                   styles={{
                     root: {
-                      borderRadius: rem(uiTokens.radius.md),
-                      minHeight: rem(34),
-                      marginLeft: rem(6),
-                      backgroundColor:
-                        location.pathname === item.link
-                          ? uiTokens.colors.primaryTintStrong
-                          : "transparent",
-                      border:
-                        location.pathname === item.link
-                          ? `1px solid ${uiTokens.colors.borderStrong}`
-                          : "1px solid transparent",
+                      padding: `${rem(6)} ${rem(8)}`,
+                      borderRadius: rem(18),
+                      fontWeight: 600,
+                      background: isOpened
+                        ? uiTokens.background.navSectionBg
+                        : "transparent",
+                      color: uiTokens.colors.heading,
+                      border: isOpened
+                        ? `1px solid ${uiTokens.colors.borderStrong}`
+                        : "1px solid transparent",
+                      boxShadow: isOpened ? uiTokens.shadow.navSection : "none",
                     },
-                    label: {
-                      fontSize: rem(12),
-                      fontWeight: location.pathname === item.link ? 600 : 500,
-                      color:
-                        location.pathname === item.link
-                          ? uiTokens.colors.heading
-                          : uiTokens.colors.text,
-                    },
+                    label: { fontSize: rem(13), color: uiTokens.colors.heading, fontWeight: 700 },
+                    description: { fontSize: rem(11), color: uiTokens.colors.textMuted, marginTop: rem(2) },
+                    section: { color: uiTokens.colors.textMuted },
+                    body: { overflow: "hidden" },
+                    children: { paddingTop: rem(6), gap: rem(4) },
+                    chevron: { color: isOpened ? uiTokens.colors.primaryDeep : uiTokens.colors.textMuted },
                   }}
-                />
-              ))}
-            </NavLink>
-          ))}
+                >
+                  {group.children.map((item) => {
+                    const isActive = location.pathname === item.link;
+
+                    return (
+                      <NavLink
+                        key={item.link}
+                        label={item.label}
+                        active={isActive}
+                        onClick={() => navigate(item.link)}
+                        variant="subtle"
+                        color="green"
+                        leftSection={
+                          <Box
+                            style={{
+                              width: rem(6),
+                              height: rem(6),
+                              borderRadius: "50%",
+                              background: isActive ? uiTokens.colors.primary : uiTokens.colors.navDotIdle,
+                              boxShadow: isActive ? uiTokens.shadow.focusRing : "none",
+                            }}
+                          />
+                        }
+                        styles={{
+                          root: {
+                            borderRadius: rem(14),
+                            minHeight: rem(38),
+                            marginLeft: rem(6),
+                            paddingInline: rem(10),
+                            background: isActive
+                              ? uiTokens.background.navItemActive
+                              : uiTokens.colors.navHover,
+                            border: isActive
+                              ? `1px solid ${uiTokens.colors.borderStrong}`
+                              : "1px solid transparent",
+                            boxShadow: isActive ? uiTokens.shadow.navItem : "none",
+                            position: "relative",
+                          },
+                          label: {
+                            fontSize: rem(12),
+                            fontWeight: isActive ? 700 : 600,
+                            color: isActive ? uiTokens.colors.heading : uiTokens.colors.text,
+                          },
+                          section: {
+                            marginInlineEnd: rem(10),
+                          },
+                        }}
+                      />
+                    );
+                  })}
+                </NavLink>
+              );
+            })}
+          </Stack>
         </AppShell.Section>
         <AppShell.Section>
           <Box
             p="xs"
             style={{
-              backgroundColor: "rgba(255,255,255,0.72)",
-              borderRadius: rem(uiTokens.radius.lg),
+              background: uiTokens.background.footerGlass,
+              borderRadius: rem(18),
               border: `1px solid ${uiTokens.colors.border}`,
             }}
           >

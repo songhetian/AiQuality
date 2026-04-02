@@ -30,6 +30,7 @@ import { SpotlightCard } from "../../components/ui/SpotlightCard";
 import { LineChart } from "../../components/ui/LineChart";
 import { PieChart } from "../../components/ui/PieChart";
 import { VirtualChatList } from "../../components/chat/VirtualChatList";
+import { uiTokens } from "../../components/ui/uiTokens";
 import type { ChatRecord as VirtualChatRecord } from "../../components/chat/VirtualChatList";
 import { useSocket } from "../../hooks/useSocket";
 import api from "../../lib/axios";
@@ -968,10 +969,12 @@ export default function LossAnalysisPage() {
 
   const dateBtnStyle = {
     height: rem(44),
-    border: '1px solid #64748b',
+    border: `1px solid ${uiTokens.colors.borderStrong}`,
     padding: `0 ${rem(16)}`,
     fontSize: rem(14),
-    fontWeight: 500,
+    fontWeight: 600,
+    color: uiTokens.colors.text,
+    backgroundColor: uiTokens.colors.panel,
   };
 
   return (
@@ -1009,7 +1012,7 @@ export default function LossAnalysisPage() {
             </Grid.Col>
             
             <Grid.Col span={1} style={{ display: 'flex', justifyContent: 'center' }}>
-              <IconArrowRight size={24} color="#adb5bd" />
+              <IconArrowRight size={24} color={uiTokens.colors.textMuted} />
             </Grid.Col>
 
             <Grid.Col span={3}>
@@ -1025,7 +1028,7 @@ export default function LossAnalysisPage() {
             </Grid.Col>
 
             <Grid.Col span={1} style={{ display: 'flex', justifyContent: 'center' }}>
-              <IconArrowRight size={24} color="#adb5bd" />
+              <IconArrowRight size={24} color={uiTokens.colors.textMuted} />
             </Grid.Col>
 
             <Grid.Col span={3}>
@@ -1168,15 +1171,15 @@ export default function LossAnalysisPage() {
               )}
               <Group gap={0} wrap="nowrap">
               <UnstyledButton 
-                style={{ ...dateBtnStyle, borderRadius: `${rem(6)} 0 0 ${rem(6)}`, backgroundColor: dateRange === 'today' ? '#f1f3f5' : 'white' }}
+                style={{ ...dateBtnStyle, borderRadius: `${rem(6)} 0 0 ${rem(6)}`, background: dateRange === 'today' ? uiTokens.background.navItemActive : uiTokens.colors.panel }}
                 onClick={() => setDateRange('today')}
               >今天</UnstyledButton>
               <UnstyledButton 
-                style={{ ...dateBtnStyle, borderLeft: 0, borderRight: 0, backgroundColor: dateRange === '7d' ? '#f1f3f5' : 'white' }}
+                style={{ ...dateBtnStyle, borderLeft: 0, borderRight: 0, background: dateRange === '7d' ? uiTokens.background.navItemActive : uiTokens.colors.panel }}
                 onClick={() => setDateRange('7d')}
               >近7天</UnstyledButton>
               <UnstyledButton 
-                style={{ ...dateBtnStyle, borderRadius: `0 ${rem(6)} ${rem(6)} 0`, backgroundColor: dateRange === '30d' ? '#f1f3f5' : 'white' }}
+                style={{ ...dateBtnStyle, borderRadius: `0 ${rem(6)} ${rem(6)} 0`, background: dateRange === '30d' ? uiTokens.background.navItemActive : uiTokens.colors.panel }}
                 onClick={() => setDateRange('30d')}
               >近30天</UnstyledButton>
               </Group>
@@ -1740,7 +1743,7 @@ export default function LossAnalysisPage() {
             ) : (auditLogs || []).length > 0 ? (
               (auditLogs || []).map((log) => (
                 <Group key={log.id} align="flex-start" wrap="nowrap">
-                  <Box mt={6} style={{ width: 10, height: 10, borderRadius: 999, background: "#2f9e44", flexShrink: 0 }} />
+                  <Box mt={6} style={{ width: 10, height: 10, borderRadius: 999, background: uiTokens.colors.primaryDeeper, flexShrink: 0 }} />
                   <Card withBorder radius="md" style={{ flex: 1 }}>
                     <Group justify="space-between" align="flex-start">
                       <Box>

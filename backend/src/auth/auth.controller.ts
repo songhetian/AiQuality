@@ -26,7 +26,7 @@ export class AuthController {
       loginDto.password,
     );
     if (!user) {
-      throw new UnauthorizedException('Invalid credentials');
+      throw new UnauthorizedException('账号或密码错误');
     }
     return this.authService.login(user);
   }

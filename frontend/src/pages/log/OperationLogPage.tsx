@@ -11,6 +11,7 @@ import {
   Switch,
   Text,
   TextInput,
+  rem,
 } from "@mantine/core";
 import { useQuery } from "@tanstack/react-query";
 import { IconFilter, IconSearch, IconTimeline } from "@tabler/icons-react";
@@ -20,6 +21,7 @@ import { PageAnimate } from "../../components/ui/PageAnimate";
 import { PageHeader } from "../../components/ui/PageHeader";
 import { CommonTable } from "../../components/table/CommonTable";
 import api from "../../lib/axios";
+import { uiTokens } from "../../components/ui/uiTokens";
 
 type PagedResult<T> = {
   list: T[];
@@ -317,7 +319,30 @@ export default function OperationLogPage() {
           }
         />
 
-        <Card withBorder radius="md" mb="md">
+        <Card
+          withBorder
+          radius="lg"
+          mb="md"
+          style={{
+            position: "relative",
+            overflow: "hidden",
+            borderColor: uiTokens.colors.border,
+            background:
+              "radial-gradient(circle at top right, rgba(199, 240, 65, 0.12), transparent 22%), linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,255,248,0.98) 100%)",
+            boxShadow: uiTokens.shadow.panel,
+          }}
+        >
+          <Box
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: rem(120),
+              height: rem(4),
+              borderRadius: rem(uiTokens.radius.pill),
+              background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+            }}
+          />
           <Group align="flex-end" grow>
             <TextInput
               label="操作人"
@@ -388,7 +413,16 @@ export default function OperationLogPage() {
           </Group>
         </Card>
 
-        <Card withBorder radius="md">
+        <Card
+          withBorder
+          radius="lg"
+          style={{
+            borderColor: uiTokens.colors.border,
+            background:
+              "linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(246,255,248,0.98) 100%)",
+            boxShadow: uiTokens.shadow.panel,
+          }}
+        >
           <CommonTable
             data={data?.list}
             columns={columns}
@@ -448,7 +482,7 @@ export default function OperationLogPage() {
                 style={{
                   margin: 0,
                   borderRadius: 8,
-                  background: "#f8f9fa",
+                  background: uiTokens.background.surfaceGlow,
                   overflowX: "auto",
                   whiteSpace: "pre-wrap",
                   wordBreak: "break-word",

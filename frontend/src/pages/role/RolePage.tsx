@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { 
+  Box,
   Paper, 
   Button, 
   Table, 
@@ -9,13 +10,16 @@ import {
   Modal, 
   MultiSelect, 
   Stack,
-  Text
+  Text,
+  rem
 } from '@mantine/core';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { IconPlus, IconEdit, IconTrash, IconLockAccess } from '@tabler/icons-react';
 import api from '../../lib/axios';
 import { notifications } from '@mantine/notifications';
 import { PageHeader } from '../../components/ui/PageHeader';
+import { PageAnimate } from '../../components/ui/PageAnimate';
+import { uiTokens } from '../../components/ui/uiTokens';
 
 type PermissionOption = {
   value: string;
@@ -78,19 +82,61 @@ export default function RolePage() {
   };
 
   return (
-    <Stack>
-      <PageHeader 
-        title="角色权限管理" 
-        description="管理系统角色及其对应的功能权限"
-        rightSection={
-          <Button leftSection={<IconPlus size={16} />} color="green">
-            新增角色
-          </Button>
-        }
-      />
+    <PageAnimate>
+      <Stack>
+        <PageHeader 
+          title="角色权限管理" 
+          description="管理系统角色及其对应的功能权限"
+          rightSection={
+            <Button leftSection={<IconPlus size={16} />} color="green">
+              新增角色
+            </Button>
+          }
+        />
 
-      <Paper withBorder shadow="sm" radius="md">
-        <Table verticalSpacing="sm">
+        <Paper
+          withBorder
+          shadow="sm"
+          radius="lg"
+          style={{
+            position: 'relative',
+            overflow: 'hidden',
+            borderColor: uiTokens.colors.border,
+            background:
+              'radial-gradient(circle at top right, rgba(199, 240, 65, 0.12), transparent 22%), linear-gradient(180deg, rgba(255,255,255,0.99) 0%, rgba(245,255,248,0.98) 100%)',
+            boxShadow: uiTokens.shadow.panel,
+          }}
+        >
+          <Box
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: rem(120),
+              height: rem(4),
+              borderRadius: rem(uiTokens.radius.pill),
+              background: `linear-gradient(90deg, ${uiTokens.colors.primary} 0%, ${uiTokens.colors.accent} 100%)`,
+            }}
+          />
+          <Table
+            verticalSpacing="sm"
+            styles={{
+              thead: {
+                background:
+                  'linear-gradient(180deg, rgba(240,255,244,0.96) 0%, rgba(233,252,239,0.96) 100%)',
+              },
+              th: {
+                fontSize: 12,
+                fontWeight: 800,
+                color: uiTokens.colors.textMuted,
+                textTransform: 'uppercase',
+                borderBottom: `1px solid ${uiTokens.colors.border}`,
+              },
+              td: {
+                borderBottom: `1px solid ${uiTokens.colors.border}`,
+              },
+            }}
+          >
           <Table.Thead>
             <Table.Tr>
               <Table.Th>角色名称</Table.Th>
@@ -143,36 +189,36 @@ export default function RolePage() {
               </Table.Tr>
             ))}
           </Table.Tbody>
-        </Table>
-      </Paper>
+          </Table>
+        </Paper>
 
-      {/* 权限分配 Modal */}
-      <Modal 
-        opened={permModalOpened} 
-        onClose={() => {
-          setPermModalOpened(false);
-          setSelectedRole(null);
-          setSelectedPerms([]);
-        }} 
-        title={`分配权限 - ${selectedRole?.name}`}
-        size="lg"
-      >
-        <Stack>
-          <MultiSelect
-            label="功能权限"
-            placeholder="请选择权限"
-            data={allPermissions}
-            value={selectedPerms}
-            onChange={setSelectedPerms}
-            searchable
-            clearable
-          />
-          <Group justify="flex-end" mt="md">
-            <Button variant="outline" onClick={() => setPermModalOpened(false)}>取消</Button>
-            <Button color="green" onClick={handleSavePerms}>保存权限</Button>
-          </Group>
-        </Stack>
-      </Modal>
-    </Stack>
+        <Modal 
+          opened={permModalOpened} 
+          onClose={() => {
+            setPermModalOpened(false);
+            setSelectedRole(null);
+            setSelectedPerms([]);
+          }} 
+          title={`分配权限 - ${selectedRole?.name}`}
+          size="lg"
+        >
+          <Stack>
+            <MultiSelect
+              label="功能权限"
+              placeholder="请选择权限"
+              data={allPermissions}
+              value={selectedPerms}
+              onChange={setSelectedPerms}
+              searchable
+              clearable
+            />
+            <Group justify="flex-end" mt="md">
+              <Button variant="outline" onClick={() => setPermModalOpened(false)}>取消</Button>
+              <Button color="green" onClick={handleSavePerms}>保存权限</Button>
+            </Group>
+          </Stack>
+        </Modal>
+      </Stack>
+    </PageAnimate>
   );
 }

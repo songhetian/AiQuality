@@ -46,9 +46,9 @@ export declare class LogController {
         pageSize: number;
     }>;
     findSystemLogs(query: any): Promise<{
+        level: string;
         id: string;
         createTime: Date;
-        level: string;
         module: string;
         message: string;
         stack: string | null;
@@ -56,9 +56,9 @@ export declare class LogController {
     findSystemLogsPage(query: any): Promise<{
         total: number;
         list: {
+            level: string;
             id: string;
             createTime: Date;
-            level: string;
             module: string;
             message: string;
             stack: string | null;
