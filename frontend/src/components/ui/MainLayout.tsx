@@ -1,33 +1,33 @@
 import {
   AppShell,
+  Avatar,
+  Badge,
+  Box,
   Burger,
   Group,
+  Menu,
   NavLink,
+  ScrollArea,
+  Stack,
+  Text,
   Title,
   UnstyledButton,
-  Text,
-  Avatar,
-  Menu,
-  Box,
   rem,
-  ScrollArea,
-  Badge,
-  Stack,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useMemo, useState } from "react";
-import { Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  IconLayoutDashboard,
-  IconHierarchy,
-  IconPlugConnected,
-  IconMessages,
-  IconReportSearch,
-  IconChartBar,
-  IconLogout,
   IconBell,
-  IconTimeline,
+  IconChartBar,
   IconCircleCheck,
+  IconHierarchy,
+  IconLayoutDashboard,
+  IconLogout,
+  IconMessages,
+  IconPlugConnected,
+  IconReportSearch,
+  IconTimeline,
 } from "@tabler/icons-react";
 import { useAuthStore } from "../../store/authStore";
 import { uiTokens } from "./uiTokens";
@@ -42,9 +42,7 @@ export function MainLayout() {
     {
       label: "控制台",
       icon: IconLayoutDashboard,
-      children: [
-        { label: "控制台概览", link: "/", permission: "dashboard:view" },
-      ],
+      children: [{ label: "控制台概览", link: "/", permission: "dashboard:view" }],
     },
     {
       label: "组织权限",
@@ -110,6 +108,7 @@ export function MainLayout() {
         .filter((group) => group.children.length > 0),
     [permissions, roles],
   );
+
   const [openedGroup, setOpenedGroup] = useState<string | null>(null);
   const activeItem = filteredNavGroups
     .flatMap((group) => group.children.map((item) => ({ ...item, group: group.label })))
@@ -133,7 +132,7 @@ export function MainLayout() {
     <AppShell
       header={{ height: 58 }}
       navbar={{
-        width: 278,
+        width: 268,
         breakpoint: "sm",
         collapsed: { mobile: !opened },
       }}
@@ -148,46 +147,34 @@ export function MainLayout() {
         style={{
           borderBottom: `${rem(1)} solid ${uiTokens.colors.border}`,
           background: uiTokens.colors.navPanelGlass,
-          backdropFilter: "blur(18px)",
+          backdropFilter: "blur(10px)",
         }}
       >
         <Group h="100%" px="md" justify="space-between">
           <Group gap="md">
             <Burger opened={opened} onClick={toggle} hiddenFrom="sm" size="sm" />
-            <Box
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: rem(10),
-                padding: `${rem(6)} ${rem(10)}`,
-                borderRadius: rem(18),
-                background: uiTokens.background.surfaceGlow,
-                border: `1px solid ${uiTokens.colors.border}`,
-                boxShadow: uiTokens.shadow.soft,
-              }}
-            >
+            <Group gap="sm">
               <Box
                 style={{
-                  width: rem(38),
-                  height: rem(38),
-                  borderRadius: rem(14),
+                  width: rem(36),
+                  height: rem(36),
+                  borderRadius: rem(10),
                   display: "grid",
                   placeItems: "center",
-                  background: `linear-gradient(135deg, ${uiTokens.colors.primaryDeeper} 0%, ${uiTokens.colors.primary} 100%)`,
-                  boxShadow: uiTokens.shadow.soft,
+                  background: uiTokens.colors.heading,
                 }}
               >
-                <IconReportSearch size={19} color={uiTokens.colors.whiteSolid} />
+                <IconReportSearch size={18} color={uiTokens.colors.whiteSolid} />
               </Box>
               <Box>
                 <Title order={4} fw={800} c={uiTokens.colors.heading}>
-                  雷犀质检系统
+                  雷技质检系统
                 </Title>
                 <Text size="11px" c={uiTokens.colors.textMuted}>
-                  质检运营管理后台
+                  运营与质检后台
                 </Text>
               </Box>
-            </Box>
+            </Group>
             <Box visibleFrom="md">
               <Text size="11px" fw={700} c={uiTokens.colors.textMuted}>
                 {activeItem?.group || "控制台"}
@@ -201,14 +188,10 @@ export function MainLayout() {
           <Group gap="md">
             <Badge
               visibleFrom="md"
-              radius="xl"
-              variant="filled"
+              radius="sm"
+              variant="light"
+              color="green"
               leftSection={<IconCircleCheck size={12} />}
-              style={{
-                background: uiTokens.colors.successBg,
-                color: uiTokens.colors.successText,
-                border: `1px solid ${uiTokens.colors.successBorder}`,
-              }}
             >
               系统在线
             </Badge>
@@ -216,31 +199,31 @@ export function MainLayout() {
               style={{
                 width: rem(34),
                 height: rem(34),
-                borderRadius: rem(uiTokens.radius.pill),
+                borderRadius: rem(10),
                 display: "grid",
                 placeItems: "center",
-                background: uiTokens.colors.panelMuted,
+                background: uiTokens.colors.panel,
                 border: `1px solid ${uiTokens.colors.border}`,
-                boxShadow: uiTokens.shadow.soft,
               }}
             >
               <IconBell size={18} color={uiTokens.colors.textMuted} />
             </UnstyledButton>
             <Menu shadow="md" width={180} position="bottom-end">
               <Menu.Target>
-                <UnstyledButton style={{
+                <UnstyledButton
+                  style={{
                     padding: `${rem(5)} ${rem(10)}`,
-                    borderRadius: rem(18),
-                    background: uiTokens.background.surfaceGlow,
+                    borderRadius: rem(14),
+                    background: uiTokens.colors.panel,
                     border: `${rem(1)} solid ${uiTokens.colors.border}`,
-                    boxShadow: uiTokens.shadow.soft,
-                  }}>
+                  }}
+                >
                   <Group gap="sm">
                     <Avatar
                       size={28}
                       radius="xl"
                       style={{
-                        background: `linear-gradient(135deg, ${uiTokens.colors.primaryDeeper} 0%, ${uiTokens.colors.primary} 100%)`,
+                        background: uiTokens.colors.primary,
                         color: uiTokens.colors.whiteSolid,
                       }}
                     >
@@ -258,7 +241,9 @@ export function MainLayout() {
                 </UnstyledButton>
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item leftSection={<IconLogout size={14} />} color="red" onClick={handleLogout}>退出登录</Menu.Item>
+                <Menu.Item leftSection={<IconLogout size={14} />} color="red" onClick={handleLogout}>
+                  退出登录
+                </Menu.Item>
               </Menu.Dropdown>
             </Menu>
           </Group>
@@ -269,61 +254,41 @@ export function MainLayout() {
         p="xs"
         style={{
           background: uiTokens.background.nav,
-          borderRight: `${rem(1)} solid ${uiTokens.colors.border}`,
+          borderRight: "none",
           boxShadow: uiTokens.shadow.nav,
           overflow: "hidden",
         }}
       >
         <AppShell.Section mb="sm">
           <Box
-            p="sm"
+            p="md"
             style={{
-              position: "relative",
-              overflow: "hidden",
-              borderRadius: rem(22),
+              borderRadius: rem(18),
               background: uiTokens.background.navCard,
-              border: `1px solid ${uiTokens.colors.border}`,
-              boxShadow: uiTokens.shadow.soft,
+              border: `1px solid rgba(255,255,255,0.08)`,
             }}
           >
-            <Group justify="space-between" align="flex-start">
-              <Box style={{ position: "relative", zIndex: 1 }}>
-                <Text size="11px" fw={700} c={uiTokens.colors.textMuted}>
-                  导航中心
-                </Text>
-                <Text size="sm" fw={700} c={uiTokens.colors.heading} mt={2}>
-                  业务控制台
-                </Text>
-                <Text size="11px" c={uiTokens.colors.textMuted} mt={6}>
-                  聚焦高频操作与关键模块
-                </Text>
-              </Box>
-              <Badge color="green" variant="filled" radius="xl">
-                {filteredNavGroups.length} 组
-              </Badge>
-            </Group>
+            <Text size="11px" fw={700} c={uiTokens.colors.textOnDarkSoft}>
+              导航中心
+            </Text>
+            <Text size="sm" fw={700} c={uiTokens.colors.textOnDark} mt={4}>
+              业务控制台
+            </Text>
+            <Text size="11px" c={uiTokens.colors.textOnDarkMuted} mt={6}>
+              按组织、运营、配置和日志模块浏览系统
+            </Text>
             <Box
               style={{
-                marginTop: rem(12),
-                width: rem(96),
-                height: rem(6),
+                marginTop: rem(14),
+                width: rem(82),
+                height: rem(4),
                 borderRadius: rem(uiTokens.radius.pill),
                 background: uiTokens.background.navLine,
               }}
             />
-            <Box
-              style={{
-                position: "absolute",
-                right: rem(-18),
-                bottom: rem(-26),
-                width: rem(96),
-                height: rem(96),
-                borderRadius: "50%",
-                background: uiTokens.background.navOrb,
-              }}
-            />
           </Box>
         </AppShell.Section>
+
         <AppShell.Section grow component={ScrollArea} scrollbarSize={6}>
           <Stack gap={8}>
             {filteredNavGroups.map((group) => {
@@ -339,51 +304,41 @@ export function MainLayout() {
                       style={{
                         width: rem(28),
                         height: rem(28),
-                        borderRadius: rem(10),
+                        borderRadius: rem(8),
                         display: "grid",
                         placeItems: "center",
-                        background: isOpened
-                          ? uiTokens.background.navSectionOpen
-                          : uiTokens.colors.navIconIdle,
-                        border: `1px solid ${isOpened ? uiTokens.colors.navIconBorderActive : uiTokens.colors.border}`,
+                        background: isOpened ? "rgba(37,99,235,0.18)" : "rgba(255,255,255,0.04)",
+                        border: `1px solid ${isOpened ? "rgba(96,165,250,0.28)" : "rgba(255,255,255,0.08)"}`,
                       }}
                     >
                       <group.icon
                         size="1rem"
                         stroke={1.8}
-                        color={isOpened ? uiTokens.colors.primaryDeep : uiTokens.colors.textMuted}
+                        color={isOpened ? "#93c5fd" : "#cbd5e1"}
                       />
                     </Box>
                   }
                   childrenOffset={12}
                   opened={isOpened}
                   onClick={() =>
-                    setOpenedGroup((current) =>
-                      current === group.label ? null : group.label,
-                    )
+                    setOpenedGroup((current) => (current === group.label ? null : group.label))
                   }
                   variant="subtle"
-                  color="green"
                   styles={{
                     root: {
                       padding: `${rem(6)} ${rem(8)}`,
-                      borderRadius: rem(18),
+                      borderRadius: rem(14),
                       fontWeight: 600,
-                      background: isOpened
-                        ? uiTokens.background.navSectionBg
-                        : "transparent",
-                      color: uiTokens.colors.heading,
-                      border: isOpened
-                        ? `1px solid ${uiTokens.colors.borderStrong}`
-                        : "1px solid transparent",
-                      boxShadow: isOpened ? uiTokens.shadow.navSection : "none",
+                      background: isOpened ? uiTokens.background.navSectionBg : "transparent",
+                      color: uiTokens.colors.textOnDark,
+                      border: isOpened ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
                     },
-                    label: { fontSize: rem(13), color: uiTokens.colors.heading, fontWeight: 700 },
-                    description: { fontSize: rem(11), color: uiTokens.colors.textMuted, marginTop: rem(2) },
-                    section: { color: uiTokens.colors.textMuted },
+                    label: { fontSize: rem(13), color: uiTokens.colors.textOnDark, fontWeight: 700 },
+                    description: { fontSize: rem(11), color: uiTokens.colors.textOnDarkMuted, marginTop: rem(2) },
+                    section: { color: uiTokens.colors.textOnDarkMuted },
                     body: { overflow: "hidden" },
                     children: { paddingTop: rem(6), gap: rem(4) },
-                    chevron: { color: isOpened ? uiTokens.colors.primaryDeep : uiTokens.colors.textMuted },
+                    chevron: { color: isOpened ? "#93c5fd" : uiTokens.colors.textOnDarkMuted },
                   }}
                 >
                   {group.children.map((item) => {
@@ -396,37 +351,29 @@ export function MainLayout() {
                         active={isActive}
                         onClick={() => navigate(item.link)}
                         variant="subtle"
-                        color="green"
                         leftSection={
                           <Box
                             style={{
                               width: rem(6),
                               height: rem(6),
                               borderRadius: "50%",
-                              background: isActive ? uiTokens.colors.primary : uiTokens.colors.navDotIdle,
-                              boxShadow: isActive ? uiTokens.shadow.focusRing : "none",
+                              background: isActive ? "#93c5fd" : "rgba(148,163,184,0.6)",
                             }}
                           />
                         }
                         styles={{
                           root: {
-                            borderRadius: rem(14),
+                            borderRadius: rem(12),
                             minHeight: rem(38),
                             marginLeft: rem(6),
                             paddingInline: rem(10),
-                            background: isActive
-                              ? uiTokens.background.navItemActive
-                              : uiTokens.colors.navHover,
-                            border: isActive
-                              ? `1px solid ${uiTokens.colors.borderStrong}`
-                              : "1px solid transparent",
-                            boxShadow: isActive ? uiTokens.shadow.navItem : "none",
-                            position: "relative",
+                            background: isActive ? uiTokens.background.navItemActive : "transparent",
+                            border: isActive ? "1px solid rgba(96,165,250,0.2)" : "1px solid transparent",
                           },
                           label: {
                             fontSize: rem(12),
                             fontWeight: isActive ? 700 : 600,
-                            color: isActive ? uiTokens.colors.heading : uiTokens.colors.text,
+                            color: isActive ? uiTokens.colors.textOnDark : uiTokens.colors.textOnDarkSoft,
                           },
                           section: {
                             marginInlineEnd: rem(10),
@@ -440,25 +387,29 @@ export function MainLayout() {
             })}
           </Stack>
         </AppShell.Section>
+
         <AppShell.Section>
           <Box
             p="xs"
             style={{
               background: uiTokens.background.footerGlass,
-              borderRadius: rem(18),
-              border: `1px solid ${uiTokens.colors.border}`,
+              borderRadius: rem(14),
+              border: `1px solid rgba(255,255,255,0.08)`,
             }}
           >
-            <Text size="xs" c={uiTokens.colors.textMuted} ta="center">
-              雷犀科技 © 2026
+            <Text size="xs" c={uiTokens.colors.textOnDarkMuted} ta="center">
+              雷技科技 © 2026
             </Text>
-            <Text size="xs" c={uiTokens.colors.textMuted} ta="center">
+            <Text size="xs" c={uiTokens.colors.textOnDarkMuted} ta="center">
               v1.0.0-prod
             </Text>
           </Box>
         </AppShell.Section>
       </AppShell.Navbar>
-      <AppShell.Main><Outlet /></AppShell.Main>
+
+      <AppShell.Main>
+        <Outlet />
+      </AppShell.Main>
     </AppShell>
   );
 }

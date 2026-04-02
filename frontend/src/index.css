@@ -1,22 +1,23 @@
 :root {
-  --text: #385345;
-  --text-h: #163324;
-  --bg: #f2fff5;
-  --border: #caf4d5;
-  --code-bg: #f4fff7;
-  --accent: #2ddf74;
-  --accent-bg: rgba(45, 223, 116, 0.14);
-  --accent-border: rgba(45, 223, 116, 0.3);
-  --social-bg: rgba(244, 255, 247, 0.8);
+  --text: #334155;
+  --text-h: #0f172a;
+  --bg: #f5f7fb;
+  --border: #d9e0ea;
+  --code-bg: #f8fafc;
+  --accent: #2563eb;
+  --accent-bg: rgba(37, 99, 235, 0.12);
+  --accent-border: rgba(37, 99, 235, 0.22);
+  --social-bg: rgba(255, 255, 255, 0.82);
   --shadow:
-    rgba(45, 223, 116, 0.12) 0 12px 28px -10px, rgba(22, 185, 90, 0.08) 0 6px 16px -6px;
+    rgba(15, 23, 42, 0.08) 0 14px 30px -12px,
+    rgba(15, 23, 42, 0.04) 0 8px 16px -8px;
 
-  --sans: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif;
-  --heading: 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif;
+  --sans: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
+  --heading: 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
   font: 14px/150% var(--sans);
-  letter-spacing: 0.12px;
+  letter-spacing: 0.08px;
   color-scheme: light;
   color: var(--text);
   background: var(--bg);
@@ -43,9 +44,7 @@
 
 body {
   margin: 0;
-  background:
-    radial-gradient(circle at top left, rgba(125, 247, 103, 0.16), transparent 24%),
-    linear-gradient(180deg, #f8fffa 0%, #effff4 100%);
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 h1,
@@ -57,22 +56,24 @@ h2 {
 
 h1 {
   font-size: 32px;
-  letter-spacing: -0.9px;
+  letter-spacing: -0.7px;
   margin: 18px 0;
   @media (max-width: 1024px) {
     font-size: 28px;
     margin: 16px 0;
   }
 }
+
 h2 {
   font-size: 22px;
   line-height: 125%;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.2px;
   margin: 0 0 8px;
   @media (max-width: 1024px) {
     font-size: 20px;
   }
 }
+
 p {
   margin: 0;
 }

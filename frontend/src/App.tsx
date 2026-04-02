@@ -34,10 +34,10 @@ const SystemLogPage = lazy(() => import("./pages/log/SystemLogPage"));
 const queryClient = new QueryClient();
 
 const theme = createTheme({
-  primaryColor: "green",
+  primaryColor: "blue",
   primaryShade: 6,
   defaultRadius: "md",
-  fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif",
+  fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif",
   fontSizes: {
     xs: "12px",
     sm: "13px",
@@ -46,7 +46,7 @@ const theme = createTheme({
     xl: "17px",
   },
   headings: {
-    fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif",
+    fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif",
     sizes: {
       h1: { fontSize: "30px", lineHeight: "1.2", fontWeight: "700" },
       h2: { fontSize: "24px", lineHeight: "1.25", fontWeight: "700" },
@@ -57,36 +57,36 @@ const theme = createTheme({
     },
   },
   colors: {
-    green: [
-      "#f2fff5",
-      "#e0ffe9",
-      "#c5ffd7",
-      "#9bf8ba",
-      "#68ee95",
-      "#45e47b",
-      "#2ddf74",
-      "#16b95a",
-      "#129449",
-      "#106f39",
+    blue: [
+      "#eef4ff",
+      "#dfeafe",
+      "#c4d9fd",
+      "#9fc0fb",
+      "#73a2f8",
+      "#4a85f2",
+      "#2563eb",
+      "#1d4ed8",
+      "#1e40af",
+      "#172f75",
     ],
     gray: [
-      "#f7fbf8",
-      "#edf4ef",
-      "#dbe7df",
-      "#c5d4ca",
-      "#92a899",
-      "#6e8476",
-      "#576b5e",
-      "#425146",
-      "#2b372f",
-      "#18211b",
+      "#f8fafc",
+      "#f1f5f9",
+      "#e2e8f0",
+      "#cbd5e1",
+      "#94a3b8",
+      "#64748b",
+      "#475569",
+      "#334155",
+      "#1e293b",
+      "#0f172a",
     ],
   },
   components: {
     Button: {
       defaultProps: {
         size: "sm",
-        radius: "xl",
+        radius: "md",
       },
       styles: {
         root: {
@@ -94,28 +94,25 @@ const theme = createTheme({
           boxShadow: uiTokens.shadow.soft,
           transition: "transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease",
         },
-        label: {
-          letterSpacing: "0.01em",
-        },
       },
     },
     ActionIcon: {
       defaultProps: {
-        radius: "xl",
+        radius: "md",
         variant: "light",
       },
       styles: {
         root: {
           border: `1px solid ${uiTokens.colors.border}`,
-          background: "linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(243,255,247,0.96) 100%)",
-          boxShadow: uiTokens.shadow.soft,
+          background: uiTokens.colors.panel,
+          boxShadow: "none",
         },
       },
     },
     TextInput: {
       defaultProps: {
         size: "sm",
-        radius: "lg",
+        radius: "md",
       },
       styles: {
         input: {
@@ -128,7 +125,7 @@ const theme = createTheme({
     PasswordInput: {
       defaultProps: {
         size: "sm",
-        radius: "lg",
+        radius: "md",
       },
       styles: {
         input: {
@@ -141,7 +138,7 @@ const theme = createTheme({
     Select: {
       defaultProps: {
         size: "sm",
-        radius: "lg",
+        radius: "md",
       },
       styles: {
         input: {
@@ -154,7 +151,7 @@ const theme = createTheme({
     NumberInput: {
       defaultProps: {
         size: "sm",
-        radius: "lg",
+        radius: "md",
       },
       styles: {
         input: {
@@ -167,18 +164,13 @@ const theme = createTheme({
     Textarea: {
       defaultProps: {
         size: "sm",
-        radius: "lg",
+        radius: "md",
       },
       styles: {
         input: {
           borderColor: uiTokens.colors.border,
           backgroundColor: uiTokens.colors.panel,
         },
-      },
-    },
-    NavLink: {
-      defaultProps: {
-        variant: "subtle",
       },
     },
     Card: {
@@ -207,12 +199,12 @@ const theme = createTheme({
     },
     Badge: {
       defaultProps: {
-        radius: "xl",
+        radius: "sm",
       },
       styles: {
         root: {
           fontWeight: 600,
-          letterSpacing: "0.2px",
+          letterSpacing: "0.1px",
           paddingInline: 10,
         },
       },
@@ -223,14 +215,11 @@ const theme = createTheme({
           gap: 8,
         },
         tab: {
-          borderRadius: uiTokens.radius.pill,
+          borderRadius: uiTokens.radius.md,
           fontWeight: 600,
           paddingInline: 14,
           background: "rgba(255,255,255,0.72)",
           border: `1px solid transparent`,
-        },
-        tabLabel: {
-          letterSpacing: "0.01em",
         },
       },
     },
@@ -249,7 +238,7 @@ const theme = createTheme({
     },
     Pagination: {
       defaultProps: {
-        radius: "xl",
+        radius: "md",
         size: "sm",
       },
     },
@@ -277,7 +266,7 @@ const theme = createTheme({
 function AppShellFallback() {
   return (
     <Center mih="100vh">
-      <Loader color="green" size="lg" />
+      <Loader color="blue" size="lg" />
     </Center>
   );
 }
@@ -311,18 +300,11 @@ export default function App() {
                     <Route path="/role" element={<RolePage />} />
                   </Route>
 
-                  <Route
-                    element={<ProtectedRoute requiredPermission="violation:record" />}
-                  >
+                  <Route element={<ProtectedRoute requiredPermission="violation:record" />}>
                     <Route path="/violation" element={<ViolationRecordPage />} />
                   </Route>
-                  <Route
-                    element={<ProtectedRoute requiredPermission="insight:question" />}
-                  >
-                    <Route
-                      path="/insight/question"
-                      element={<HighFreqQuestionPage />}
-                    />
+                  <Route element={<ProtectedRoute requiredPermission="insight:question" />}>
+                    <Route path="/insight/question" element={<HighFreqQuestionPage />} />
                   </Route>
                   <Route element={<ProtectedRoute requiredPermission="insight:loss" />}>
                     <Route path="/insight/loss" element={<LossAnalysisPage />} />
