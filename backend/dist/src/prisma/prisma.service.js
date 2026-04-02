@@ -14,13 +14,11 @@ exports.PrismaService = void 0;
 const common_1 = require("@nestjs/common");
 const client_1 = require("@prisma/client");
 const adapter_mariadb_1 = require("@prisma/adapter-mariadb");
+const database_url_1 = require("../../database-url");
 let PrismaService = PrismaService_1 = class PrismaService extends client_1.PrismaClient {
     logger = new common_1.Logger(PrismaService_1.name);
     constructor() {
-        const databaseUrl = process.env.DATABASE_URL;
-        if (!databaseUrl) {
-            throw new Error('环境变量 DATABASE_URL 未定义，请检查根目录 .env 文件。');
-        }
+        const databaseUrl = (0, database_url_1.resolveDatabaseUrl)(process.env);
         super({
             adapter: new adapter_mariadb_1.PrismaMariaDb(databaseUrl),
             log: [
@@ -41,7 +39,7 @@ let PrismaService = PrismaService_1 = class PrismaService extends client_1.Prism
             console.log('[prisma] MySQL connected');
         }
         catch (error) {
-            this.logger.error('❌ 数据库连接失败:', error);
+            this.logger.error('数据库连接失败', error);
             throw error;
         }
     }

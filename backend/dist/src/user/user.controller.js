@@ -15,31 +15,32 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
 const user_service_1 = require("./user.service");
-const client_1 = require("@prisma/client");
 const roles_guard_1 = require("../auth/guards/roles.guard");
 const permissions_guard_1 = require("../auth/guards/permissions.guard");
 const roles_decorator_1 = require("../auth/decorators/roles.decorator");
 const permissions_decorator_1 = require("../auth/decorators/permissions.decorator");
 const jwt_auth_guard_1 = require("../auth/jwt-auth.guard");
+const zod_validation_1 = require("../common/utils/zod-validation");
+const user_schemas_1 = require("./user.schemas");
 let UserController = class UserController {
     userService;
     constructor(userService) {
         this.userService = userService;
     }
-    create(data) {
-        return this.userService.create(data);
+    create(body) {
+        return this.userService.create((0, zod_validation_1.parseWithZod)(user_schemas_1.createUserSchema, body));
     }
     findAll(query) {
-        return this.userService.findAll(query);
+        return this.userService.findAll((0, zod_validation_1.parseWithZod)(user_schemas_1.userListQuerySchema, query));
     }
     getMe(req) {
         return req.user;
     }
     findOne(id) {
-        return this.userService.findByUsername(id);
+        return this.userService.findById(id);
     }
-    update(id, data) {
-        return this.userService.update(id, data);
+    update(id, body) {
+        return this.userService.update(id, (0, zod_validation_1.parseWithZod)(user_schemas_1.updateUserSchema, body));
     }
     remove(id) {
         return this.userService.remove(id);

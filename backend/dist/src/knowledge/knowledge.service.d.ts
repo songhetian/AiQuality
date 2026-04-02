@@ -23,10 +23,10 @@ export declare class KnowledgeService {
         deptId: string | null;
         createTime: Date;
         updateTime: Date;
+        title: string;
         createBy: string;
         vectorId: string | null;
         errorMessage: string | null;
-        title: string;
         fileName: string;
         fileUrl: string;
         fileType: string;
@@ -41,10 +41,10 @@ export declare class KnowledgeService {
             deptId: string | null;
             createTime: Date;
             updateTime: Date;
+            title: string;
             createBy: string;
             vectorId: string | null;
             errorMessage: string | null;
-            title: string;
             fileName: string;
             fileUrl: string;
             fileType: string;
@@ -68,10 +68,10 @@ export declare class KnowledgeService {
             deptId: string | null;
             createTime: Date;
             updateTime: Date;
+            title: string;
             createBy: string;
             vectorId: string | null;
             errorMessage: string | null;
-            title: string;
             fileName: string;
             fileUrl: string;
             fileType: string;

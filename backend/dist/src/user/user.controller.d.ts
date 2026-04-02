@@ -1,9 +1,25 @@
 import { UserService } from './user.service';
-import { Prisma } from '@prisma/client';
 export declare class UserController {
     private readonly userService;
     constructor(userService: UserService);
-    create(data: Prisma.UserCreateInput): Promise<{
+    create(body: unknown): Promise<{
+        platform: {
+            id: string;
+            name: string;
+        } | null;
+        department: {
+            id: string;
+            name: string;
+        } | null;
+        shop: {
+            id: string;
+            name: string;
+        } | null;
+        roles: {
+            id: string;
+            name: string;
+        }[];
+    } & {
         password: string;
         status: number;
         id: string;
@@ -16,31 +32,58 @@ export declare class UserController {
         phone: string | null;
         email: string | null;
     }>;
-    findAll(query: any): Promise<{
-        password: string;
-        status: number;
-        id: string;
-        username: string;
-        platformId: string | null;
-        deptId: string | null;
-        createTime: Date;
-        shopId: string | null;
-        updateTime: Date;
-        phone: string | null;
-        email: string | null;
-    }[]>;
-    getMe(req: any): any;
-    findOne(id: string): Promise<({
-        roles: {
+    findAll(query: Record<string, unknown>): Promise<{
+        list: ({
+            platform: {
+                id: string;
+                name: string;
+            } | null;
+            department: {
+                id: string;
+                name: string;
+            } | null;
+            shop: {
+                id: string;
+                name: string;
+            } | null;
+            roles: {
+                id: string;
+                name: string;
+            }[];
+        } & {
+            password: string;
             status: number;
             id: string;
+            username: string;
             platformId: string | null;
             deptId: string | null;
             createTime: Date;
-            name: string;
+            shopId: string | null;
             updateTime: Date;
-            description: string | null;
-            isSystem: boolean;
+            phone: string | null;
+            email: string | null;
+        })[];
+        total: number;
+        page: number;
+        pageSize: number;
+    }>;
+    getMe(req: any): any;
+    findOne(id: string): Promise<({
+        platform: {
+            id: string;
+            name: string;
+        } | null;
+        department: {
+            id: string;
+            name: string;
+        } | null;
+        shop: {
+            id: string;
+            name: string;
+        } | null;
+        roles: {
+            id: string;
+            name: string;
         }[];
     } & {
         password: string;
@@ -55,7 +98,24 @@ export declare class UserController {
         phone: string | null;
         email: string | null;
     }) | null>;
-    update(id: string, data: Prisma.UserUpdateInput): Promise<{
+    update(id: string, body: unknown): Promise<{
+        platform: {
+            id: string;
+            name: string;
+        } | null;
+        department: {
+            id: string;
+            name: string;
+        } | null;
+        shop: {
+            id: string;
+            name: string;
+        } | null;
+        roles: {
+            id: string;
+            name: string;
+        }[];
+    } & {
         password: string;
         status: number;
         id: string;

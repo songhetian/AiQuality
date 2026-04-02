@@ -51,49 +51,146 @@ let UserService = class UserService {
     constructor(prisma) {
         this.prisma = prisma;
     }
+    userIncludes = {
+        roles: {
+            select: {
+                id: true,
+                name: true,
+            },
+        },
+        department: {
+            select: {
+                id: true,
+                name: true,
+            },
+        },
+        platform: {
+            select: {
+                id: true,
+                name: true,
+            },
+        },
+        shop: {
+            select: {
+                id: true,
+                name: true,
+            },
+        },
+    };
     encryptPassword(password) {
         return CryptoJS.SHA256(password).toString();
     }
     async create(data) {
         const encrypted = this.encryptPassword(data.password);
         return this.prisma.user.create({
-            data: {
-                ...data,
-                password: encrypted,
-            },
+            data: this.buildCreateData(data, encrypted),
+            include: this.userIncludes,
         });
     }
     async findByUsername(username) {
         return this.prisma.user.findUnique({
             where: { username },
-            include: { roles: true },
+            include: this.userIncludes,
+        });
+    }
+    async findById(id) {
+        return this.prisma.user.findUnique({
+            where: { id },
+            include: this.userIncludes,
         });
     }
     async findAll(query) {
-        const { platformId, deptId, shopId, page = 1, pageSize = 10 } = query;
+        const { platformId, deptId, shopId, username, status, page, pageSize } = query;
         const skip = (page - 1) * pageSize;
-        return this.prisma.user.findMany({
-            where: {
-                platformId: platformId || undefined,
-                deptId: deptId || undefined,
-                shopId: shopId || undefined,
-            },
-            skip: parseInt(skip.toString()),
-            take: parseInt(pageSize.toString()),
-            orderBy: { createTime: 'desc' },
-        });
+        const where = {
+            platformId: platformId ?? undefined,
+            deptId: deptId ?? undefined,
+            shopId: shopId ?? undefined,
+            status,
+            OR: username
+                ? [
+                    {
+                        username: {
+                            contains: username,
+                        },
+                    },
+                    {
+                        phone: {
+                            contains: username,
+                        },
+                    },
+                    {
+                        email: {
+                            contains: username,
+                        },
+                    },
+                ]
+                : undefined,
+        };
+        const [list, total] = await this.prisma.$transaction([
+            this.prisma.user.findMany({
+                where,
+                skip,
+                take: pageSize,
+                orderBy: { createTime: 'desc' },
+                include: this.userIncludes,
+            }),
+            this.prisma.user.count({ where }),
+        ]);
+        return { list, total, page, pageSize };
     }
     async update(id, data) {
-        if (data.password) {
-            data.password = this.encryptPassword(data.password);
-        }
         return this.prisma.user.update({
             where: { id },
-            data,
+            data: this.buildUpdateData(data),
+            include: this.userIncludes,
         });
     }
     async remove(id) {
         return this.prisma.user.delete({ where: { id } });
+    }
+    buildCreateData(data, encryptedPassword) {
+        return {
+            username: data.username,
+            password: encryptedPassword,
+            phone: data.phone,
+            email: data.email,
+            status: data.status,
+            platform: this.toRelationInput(data.platformId),
+            department: this.toRelationInput(data.deptId),
+            shop: this.toRelationInput(data.shopId),
+            roles: data.roleIds.length
+                ? {
+                    connect: data.roleIds.map((id) => ({ id })),
+                }
+                : undefined,
+        };
+    }
+    buildUpdateData(data) {
+        return {
+            username: data.username,
+            phone: data.phone,
+            email: data.email,
+            status: data.status,
+            password: data.password ? this.encryptPassword(data.password) : undefined,
+            platform: this.toRelationInput(data.platformId, true),
+            department: this.toRelationInput(data.deptId, true),
+            shop: this.toRelationInput(data.shopId, true),
+            roles: {
+                set: data.roleIds.map((id) => ({ id })),
+            },
+        };
+    }
+    toRelationInput(relationId, allowDisconnect = false) {
+        if (relationId === undefined) {
+            return undefined;
+        }
+        if (relationId === null) {
+            return allowDisconnect ? { disconnect: true } : undefined;
+        }
+        return {
+            connect: { id: relationId },
+        };
     }
 };
 exports.UserService = UserService;

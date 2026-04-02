@@ -36,6 +36,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const path = __importStar(require("path"));
 const config_1 = require("prisma/config");
+const database_url_1 = require("./database-url");
 if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config({
         path: path.resolve(__dirname, '../.env'),
@@ -47,7 +48,7 @@ exports.default = (0, config_1.defineConfig)({
         path: 'prisma/migrations',
     },
     datasource: {
-        url: process.env['DATABASE_URL'],
+        url: (0, database_url_1.resolveDatabaseUrl)(process.env),
     },
 });
 //# sourceMappingURL=prisma.config.js.map
