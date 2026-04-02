@@ -13,10 +13,14 @@ const auth_controller_1 = require("./auth.controller");
 const jwt_1 = require("@nestjs/jwt");
 const passport_1 = require("@nestjs/passport");
 const config_1 = require("@nestjs/config");
+const jwt_auth_guard_1 = require("./jwt-auth.guard");
+const roles_guard_1 = require("./guards/roles.guard");
+const permissions_guard_1 = require("./guards/permissions.guard");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
 exports.AuthModule = AuthModule = __decorate([
+    (0, common_1.Global)(),
     (0, common_1.Module)({
         imports: [
             passport_1.PassportModule,
@@ -28,9 +32,15 @@ exports.AuthModule = AuthModule = __decorate([
                 }),
             }),
         ],
-        providers: [auth_service_1.AuthService],
+        providers: [auth_service_1.AuthService, jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard],
         controllers: [auth_controller_1.AuthController],
-        exports: [auth_service_1.AuthService, jwt_1.JwtModule],
+        exports: [
+            auth_service_1.AuthService,
+            jwt_1.JwtModule,
+            jwt_auth_guard_1.JwtAuthGuard,
+            roles_guard_1.RolesGuard,
+            permissions_guard_1.PermissionsGuard,
+        ],
     })
 ], AuthModule);
 //# sourceMappingURL=auth.module.js.map

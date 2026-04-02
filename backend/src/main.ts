@@ -1,13 +1,26 @@
+import * as dotenv from 'dotenv';
+import * as path from 'path';
+
+// 加载根目录的 .env 文件 (必须在 NestFactory 之前加载)
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({
+    path: path.resolve(__dirname, '../../.env'),
+  });
+}
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { TransformInterceptor } from './common/interceptors/transform.interceptor';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
-import { Logger } from '@nestjs/common';
 import { RedisIoAdapter } from './socket/redis-io.adapter';
 
 async function bootstrap() {
-  const logger = new Logger('Bootstrap');
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger:
+      process.env.NODE_ENV === 'production'
+        ? ['error', 'warn', 'log']
+        : ['error', 'warn'],
+  });
 
   // 全局响应拦截器
   app.useGlobalInterceptors(new TransformInterceptor());
@@ -27,6 +40,10 @@ async function bootstrap() {
 
   const port = process.env.PORT || 3000;
   await app.listen(port);
-  logger.log(`Application is running on: http://localhost:${port}/api`);
+
+  console.log(`[bootstrap] API ready: http://localhost:${port}/api`);
+  console.log(
+    `[bootstrap] Environment: ${process.env.NODE_ENV || 'development'}`,
+  );
 }
 bootstrap();

@@ -13,7 +13,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 
-@Controller('api/cost')
+@Controller('cost')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class CostController {
   constructor(private readonly costService: CostService) {}

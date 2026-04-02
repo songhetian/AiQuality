@@ -73,7 +73,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], KeywordController.prototype, "updateStatus", null);
 exports.KeywordController = KeywordController = __decorate([
-    (0, common_1.Controller)('api/keyword'),
+    (0, common_1.Controller)('keyword'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [keyword_service_1.KeywordService])
 ], KeywordController);

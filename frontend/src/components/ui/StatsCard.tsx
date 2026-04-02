@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Group, Text, ThemeIcon, rem } from "@mantine/core";
 import { CountUp } from "./CountUp";
+import { uiTokens } from "./uiTokens";
 
 interface IconProps {
   size?: number | string;
@@ -31,18 +32,28 @@ export function StatsCard({
   const isNumeric = !isNaN(numericValue);
 
   return (
-    <Card withBorder radius="md" p="md" shadow="sm">
+    <Card
+      withBorder
+      radius="md"
+      p="md"
+      shadow="xs"
+      style={{
+        borderColor: uiTokens.colors.border,
+        background: uiTokens.background.panel,
+        boxShadow: uiTokens.shadow.panel,
+      }}
+    >
       <Group justify="space-between">
-        <Text size="xs" c="dimmed" fw={700} tt="uppercase">
+        <Text size="xs" c={uiTokens.colors.textMuted} fw={700} tt="uppercase">
           {title}
         </Text>
-        <ThemeIcon color={color} variant="light" size={32} radius="md">
+        <ThemeIcon color={color} variant="light" size={36} radius="md">
           <Icon style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
         </ThemeIcon>
       </Group>
 
       <Group align="flex-end" gap="xs" mt={rem(20)}>
-        <Text fw={800} fz="xl" lh={1} c="green.9">
+        <Text fw={800} fz="xl" lh={1} c={uiTokens.colors.heading}>
           {isNumeric ? <CountUp to={numericValue} /> : value}
         </Text>
         {diff && (
@@ -59,7 +70,7 @@ export function StatsCard({
       </Group>
 
       {(description || diff) && (
-        <Text fz="xs" c="dimmed" mt={rem(7)}>
+        <Text fz="xs" c={uiTokens.colors.textMuted} mt={rem(7)}>
           {description || "较昨日数据"}
         </Text>
       )}

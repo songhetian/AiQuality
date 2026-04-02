@@ -1,6 +1,7 @@
 import { Box, LoadingOverlay, useMantineTheme } from "@mantine/core";
 import { useEffect, useRef, useState } from "react";
 import type { ECharts, EChartsCoreOption } from "echarts/core";
+import { uiTokens } from "./uiTokens";
 
 export interface ChartFrameProps {
   option: EChartsCoreOption;
@@ -98,10 +99,10 @@ export function ChartFrame({
     const base: EChartsCoreOption = {
       color: [
         theme.colors.green[6],
-        theme.colors.blue[6],
+        theme.colors.cyan[6],
         theme.colors.orange[6],
         theme.colors.red[6],
-        theme.colors.violet[6],
+        theme.colors.indigo[6],
       ],
       textStyle: {
         fontFamily: theme.fontFamily,
@@ -117,11 +118,11 @@ export function ChartFrame({
       tooltip: {
         trigger: "axis",
         backgroundColor: "rgba(255, 255, 255, 0.95)",
-        borderColor: theme.colors.green[2],
+        borderColor: uiTokens.colors.border,
         borderWidth: 1,
         textStyle: { color: theme.colors.gray[9] },
         axisPointer: {
-          lineStyle: { color: theme.colors.green[2] },
+          lineStyle: { color: uiTokens.colors.borderStrong },
         },
       },
       legend: {

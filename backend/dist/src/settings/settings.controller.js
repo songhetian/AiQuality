@@ -72,7 +72,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], SettingsController.prototype, "testAiConfig", null);
 exports.SettingsController = SettingsController = __decorate([
-    (0, common_1.Controller)('api/settings'),
+    (0, common_1.Controller)('settings'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [settings_service_1.SettingsService])
 ], SettingsController);

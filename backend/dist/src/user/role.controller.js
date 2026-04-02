@@ -100,7 +100,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], RoleController.prototype, "assignPermissions", null);
 exports.RoleController = RoleController = __decorate([
-    (0, common_1.Controller)('api/role'),
+    (0, common_1.Controller)('role'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [role_service_1.RoleService])
 ], RoleController);

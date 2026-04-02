@@ -9,5 +9,6 @@ import { CostModule } from '../cost/cost.module';
   imports: [CostModule],
   providers: [AiService, InsightService, AiIntegrationService],
   controllers: [AiController],
+  exports: [AiIntegrationService],
 })
 export class AiModule {}

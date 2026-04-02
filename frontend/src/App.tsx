@@ -4,6 +4,7 @@ import { MantineProvider, Center, Loader, createTheme } from "@mantine/core";
 import { Notifications } from "@mantine/notifications";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { MainLayout } from "./components/ui/MainLayout";
+import { uiTokens } from "./components/ui/uiTokens";
 import { ProtectedRoute } from "./components/auth/ProtectedRoute";
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
@@ -34,20 +35,214 @@ const queryClient = new QueryClient();
 
 const theme = createTheme({
   primaryColor: "green",
-  primaryShade: 6,
+  primaryShade: 7,
+  defaultRadius: "md",
+  fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif",
+  fontSizes: {
+    xs: "12px",
+    sm: "13px",
+    md: "14px",
+    lg: "15px",
+    xl: "17px",
+  },
+  headings: {
+    fontFamily: "'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', 'Segoe UI', sans-serif",
+    sizes: {
+      h1: { fontSize: "30px", lineHeight: "1.2", fontWeight: "700" },
+      h2: { fontSize: "24px", lineHeight: "1.25", fontWeight: "700" },
+      h3: { fontSize: "20px", lineHeight: "1.3", fontWeight: "700" },
+      h4: { fontSize: "17px", lineHeight: "1.35", fontWeight: "700" },
+      h5: { fontSize: "15px", lineHeight: "1.4", fontWeight: "700" },
+      h6: { fontSize: "14px", lineHeight: "1.4", fontWeight: "700" },
+    },
+  },
   colors: {
     green: [
-      "#ebfbee",
-      "#d3f9d8",
-      "#b2f2bb",
-      "#8ce99a",
-      "#69db7c",
-      "#51cf66",
-      "#40c057",
-      "#37b24d",
-      "#2f9e44",
-      "#2b8a3e",
+      "#f3f7f1",
+      "#e8efe4",
+      "#d6e2d0",
+      "#c1d2bb",
+      "#a8bf9f",
+      "#8fa987",
+      "#7c9674",
+      "#6f8f6b",
+      "#587455",
+      "#455d43",
     ],
+    gray: [
+      "#f8faf7",
+      "#f2f5f0",
+      "#e5ebe2",
+      "#d6dfd2",
+      "#a2afa0",
+      "#728174",
+      "#5b695d",
+      "#455449",
+      "#2f3b31",
+      "#1f2821",
+    ],
+  },
+  components: {
+    Button: {
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        root: {
+          fontWeight: 600,
+          boxShadow: uiTokens.shadow.soft,
+        },
+      },
+    },
+    TextInput: {
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        input: {
+          borderColor: uiTokens.colors.border,
+          backgroundColor: uiTokens.colors.panel,
+        },
+      },
+    },
+    PasswordInput: {
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        input: {
+          borderColor: uiTokens.colors.border,
+          backgroundColor: uiTokens.colors.panel,
+        },
+      },
+    },
+    Select: {
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        input: {
+          borderColor: uiTokens.colors.border,
+          backgroundColor: uiTokens.colors.panel,
+        },
+      },
+    },
+    NumberInput: {
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        input: {
+          borderColor: uiTokens.colors.border,
+          backgroundColor: uiTokens.colors.panel,
+        },
+      },
+    },
+    Textarea: {
+      defaultProps: {
+        size: "sm",
+        radius: "md",
+      },
+      styles: {
+        input: {
+          borderColor: uiTokens.colors.border,
+          backgroundColor: uiTokens.colors.panel,
+        },
+      },
+    },
+    NavLink: {
+      defaultProps: {
+        variant: "subtle",
+      },
+    },
+    Card: {
+      defaultProps: {
+        withBorder: true,
+        radius: "md",
+        shadow: "xs",
+      },
+      styles: {
+        root: {
+          borderColor: uiTokens.colors.border,
+          boxShadow: uiTokens.shadow.panel,
+          background: uiTokens.background.panel,
+        },
+      },
+    },
+    Paper: {
+      defaultProps: {
+        radius: "md",
+      },
+      styles: {
+        root: {
+          borderColor: uiTokens.colors.border,
+        },
+      },
+    },
+    Badge: {
+      defaultProps: {
+        radius: "md",
+      },
+      styles: {
+        root: {
+          fontWeight: 600,
+          letterSpacing: "0.2px",
+        },
+      },
+    },
+    Tabs: {
+      styles: {
+        list: {
+          gap: 8,
+        },
+        tab: {
+          borderRadius: uiTokens.radius.md,
+          fontWeight: 600,
+        },
+      },
+    },
+    Table: {
+      styles: {
+        th: {
+          backgroundColor: uiTokens.colors.panelSubtle,
+          color: uiTokens.colors.text,
+          fontWeight: 700,
+          borderBottomColor: uiTokens.colors.border,
+        },
+        td: {
+          borderBottomColor: uiTokens.colors.border,
+        },
+      },
+    },
+    Pagination: {
+      defaultProps: {
+        radius: "sm",
+        size: "sm",
+      },
+    },
+    Menu: {
+      styles: {
+        dropdown: {
+          borderColor: uiTokens.colors.border,
+          boxShadow: uiTokens.shadow.panel,
+        },
+      },
+    },
+    Modal: {
+      styles: {
+        content: {
+          borderRadius: uiTokens.radius.lg,
+        },
+        header: {
+          borderBottom: `1px solid ${uiTokens.colors.border}`,
+        },
+      },
+    },
   },
 });
 

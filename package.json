@@ -4,15 +4,38 @@
   "description": "客服质检系统 - 前端和后端一体化管理",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "dev:backend": "cd backend && npm run start:dev",
-    "dev:frontend": "cd frontend && npm run dev",
-    "build": "npm run build:backend && npm run build:frontend",
-    "build:backend": "cd backend && npm run build",
-    "build:frontend": "cd frontend && npm run build",
-    "start:backend": "cd backend && npm run start:prod",
-    "start:frontend": "cd frontend && npm run preview",
+    "//_1": "--- 【1. 本地开发模式：适合编写代码，支持热更新】 ---",
+    "//_2": "[推荐] 当您开始写代码时运行：一键启动 Docker 数据库 + 本地前后端",
+    "dev:all": "npm run docker:infra && npm run dev",
+    "//_3": "当数据库已启动，只想重启前后端服务时运行",
+    "dev": "concurrently \"npm run dev:api\" \"npm run dev:ui\"",
+    "//_4": "仅当需要单独调试后端接口时运行",
+    "dev:api": "cd backend && npm run start:dev",
+    "//_5": "仅当需要单独调试前端界面时运行",
+    "dev:ui": "cd frontend && npm run dev",
+
+    "//_6": "--- 【2. Docker 线上/部署模式：全量容器化运行】 ---",
+    "//_7": "当您修改了代码或配置，想看最终容器化效果时运行 (重新构建镜像)",
+    "docker:build": "docker-compose up -d --build",
+    "//_8": "当镜像已存在，仅需快速启动生产环境时运行",
+    "docker:up": "docker-compose up -d",
+    "//_8_1": "当修改了端口或配置后，重启所有容器使之生效",
+    "docker:restart": "docker-compose restart",
+    "//_9": "当您想释放内存、彻底关闭并移除所有容器时运行",
+    "docker:down": "docker-compose down",
+    "//_10": "当生产环境运行异常，需要查看实时错误日志时运行",
+    "docker:logs": "docker-compose logs -f",
+    "//_11": "仅启动数据库基础环境 (配合本地开发命令使用)",
+    "docker:infra": "docker-compose up -d mysql redis qdrant minio",
+
+    "//_12": "--- 【3. 数据库与项目维护命令】 ---",
+    "//_13": "手动将最新的 schema.sql 导入到 Docker 数据库 (外部端口: 3307)",
+    "db:import": "docker exec -i mysql-aiquality mysql -uroot -p123456 aiquality < schema.sql",
+    "//_14": "修改 Prisma 后同步表结构并生成客户端代码 (必须在本地开发前执行)",
+    "db:init": "cd backend && npx prisma db push && npx prisma generate",
+    "//_15": "新克隆项目后，一键安装前后端所有依赖包",
     "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "//_16": "当环境异常，需要重装所有 node_modules 时运行",
     "clean": "rm -rf node_modules backend/node_modules frontend/node_modules"
   },
   "keywords": [
@@ -23,6 +46,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "concurrently": "^9.1.2"
+    "concurrently": "^9.1.2",
+    "dotenv": "^16.6.1"
   }
 }

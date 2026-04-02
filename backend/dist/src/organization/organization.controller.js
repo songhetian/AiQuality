@@ -49,7 +49,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PlatformController.prototype, "findAll", null);
 exports.PlatformController = PlatformController = __decorate([
-    (0, common_1.Controller)('api/platform'),
+    (0, common_1.Controller)('platform'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [organization_service_1.OrganizationService])
 ], PlatformController);
@@ -83,7 +83,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], DeptController.prototype, "findAll", null);
 exports.DeptController = DeptController = __decorate([
-    (0, common_1.Controller)('api/dept'),
+    (0, common_1.Controller)('dept'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [organization_service_1.OrganizationService])
 ], DeptController);
@@ -117,7 +117,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ShopController.prototype, "findAll", null);
 exports.ShopController = ShopController = __decorate([
-    (0, common_1.Controller)('api/shop'),
+    (0, common_1.Controller)('shop'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [organization_service_1.OrganizationService])
 ], ShopController);

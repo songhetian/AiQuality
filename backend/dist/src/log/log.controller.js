@@ -131,7 +131,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], LogController.prototype, "handleViolationsBulk", null);
 exports.LogController = LogController = __decorate([
-    (0, common_1.Controller)('api/log'),
+    (0, common_1.Controller)('log'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [log_service_1.LogService])
 ], LogController);

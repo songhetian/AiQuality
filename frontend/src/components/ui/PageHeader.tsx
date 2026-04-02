@@ -1,4 +1,5 @@
-import { Title, Text, Group, Box, Breadcrumbs, Anchor, rem } from '@mantine/core';
+import { Title, Text, Group, Box, Breadcrumbs, Anchor, rem, Paper } from '@mantine/core';
+import { uiTokens } from './uiTokens';
 
 interface PageHeaderProps {
   title: string;
@@ -10,7 +11,7 @@ interface PageHeaderProps {
 
 export function PageHeader({ title, description, rightSection, action, breadcrumbs }: PageHeaderProps) {
   const items = breadcrumbs?.map((item, index) => (
-    <Anchor href={item.href} key={index} size="xs" c="green.7">
+    <Anchor href={item.href} key={index} size="xs" c={uiTokens.colors.textMuted} fw={600}>
       {item.title}
     </Anchor>
   )) || [];
@@ -18,15 +19,24 @@ export function PageHeader({ title, description, rightSection, action, breadcrum
   const finalRightSection = rightSection || action;
 
   return (
-    <Box mb="xl">
+    <Paper
+      mb="md"
+      p="md"
+      radius="md"
+      style={{
+        border: `1px solid ${uiTokens.colors.border}`,
+        background: uiTokens.background.panel,
+        boxShadow: uiTokens.shadow.panel,
+      }}
+    >
       {items.length > 0 && <Breadcrumbs mb="xs">{items}</Breadcrumbs>}
       <Group justify="space-between" align="flex-start">
         <Box>
-          <Title order={2} c="green.9" fw={800}>{title}</Title>
-          {description && <Text size="sm" c="dimmed" mt={rem(4)}>{description}</Text>}
+          <Title order={2} c={uiTokens.colors.heading} fw={800}>{title}</Title>
+          {description && <Text size="sm" c={uiTokens.colors.textMuted} mt={rem(4)}>{description}</Text>}
         </Box>
         {finalRightSection && <Box>{finalRightSection}</Box>}
       </Group>
-    </Box>
+    </Paper>
   );
 }

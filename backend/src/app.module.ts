@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { APP_INTERCEPTOR, APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import * as path from 'path';
 import { LogInterceptor } from './common/interceptors/log.interceptor';
 import { JwtAuthGuard } from './auth/jwt-auth.guard';
 import { AppController } from './app.controller';
@@ -28,7 +29,13 @@ import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: [
+        path.resolve(process.cwd(), '../.env'),
+        path.resolve(process.cwd(), '.env'),
+      ],
+    }),
     ThrottlerModule.forRoot([
       {
         ttl: 60000,

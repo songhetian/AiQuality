@@ -11,12 +11,13 @@ const common_1 = require("@nestjs/common");
 const adapter_service_1 = require("./adapter.service");
 const adapter_controller_1 = require("./adapter.controller");
 const keyword_module_1 = require("../keyword/keyword.module");
+const quality_module_1 = require("../quality/quality.module");
 let AdapterModule = class AdapterModule {
 };
 exports.AdapterModule = AdapterModule;
 exports.AdapterModule = AdapterModule = __decorate([
     (0, common_1.Module)({
-        imports: [keyword_module_1.KeywordModule],
+        imports: [keyword_module_1.KeywordModule, quality_module_1.QualityModule],
         providers: [adapter_service_1.AdapterService],
         controllers: [adapter_controller_1.AdapterController],
     })

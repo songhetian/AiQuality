@@ -43,7 +43,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], OssController.prototype, "uploadFile", null);
 exports.OssController = OssController = __decorate([
-    (0, common_1.Controller)('api/file'),
+    (0, common_1.Controller)('file'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [oss_service_1.OssService])
 ], OssController);

@@ -1,5 +1,6 @@
 import React from "react";
 import { Stack, Text, Center, rem, useMantineTheme } from "@mantine/core";
+import { uiTokens } from "./uiTokens";
 
 interface IconProps {
   size?: number | string;
@@ -24,13 +25,23 @@ export function EmptyState({
 
   return (
     <Center py={rem(60)}>
-      <Stack align="center" gap="xs">
-        <Icon size={48} stroke={1.2} color={theme.colors.gray[4]} />
-        <Text fw={700} c="gray.6">
+      <Stack
+        align="center"
+        gap="xs"
+        p="xl"
+        style={{
+          minWidth: rem(280),
+          borderRadius: rem(uiTokens.radius.lg),
+          border: `1px dashed ${uiTokens.colors.borderStrong}`,
+          background: uiTokens.background.panelSoft,
+        }}
+      >
+        <Icon size={48} stroke={1.2} color={uiTokens.colors.textMuted} />
+        <Text fw={700} c={uiTokens.colors.text}>
           {title}
         </Text>
         {description && (
-          <Text size="sm" c="dimmed" ta="center" style={{ maxWidth: 300 }}>
+          <Text size="sm" c={theme.colors.gray[5]} ta="center" style={{ maxWidth: 300 }}>
             {description}
           </Text>
         )}

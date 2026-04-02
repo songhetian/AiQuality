@@ -14,7 +14,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 
-@Controller('api/log')
+@Controller('log')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class LogController {
   constructor(private readonly logService: LogService) {}

@@ -15,7 +15,7 @@ import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 import { InsightService } from './insight.service';
 
-@Controller('api/ai')
+@Controller('ai')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class AiController {
   constructor(private readonly insightService: InsightService) {}

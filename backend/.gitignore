@@ -1,0 +1,33 @@
+# compiled output
+/dist
+/node_modules
+/build
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# 环境变量文件（现在统一使用根目录的 .env）
+.env
+.env.local
+.env.*.local
+
+# Prisma
+prisma/migrations/*
+!prisma/migrations/.gitkeep

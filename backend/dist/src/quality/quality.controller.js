@@ -149,7 +149,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], QualityController.prototype, "batchUpdate", null);
 exports.QualityController = QualityController = __decorate([
-    (0, common_1.Controller)('api/quality'),
+    (0, common_1.Controller)('quality'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [quality_service_1.QualityService])
 ], QualityController);

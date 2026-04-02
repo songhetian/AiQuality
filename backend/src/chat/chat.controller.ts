@@ -14,7 +14,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 
-@Controller('api/chat')
+@Controller('chat')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}

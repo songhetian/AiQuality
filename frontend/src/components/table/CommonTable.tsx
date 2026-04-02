@@ -9,6 +9,7 @@ import {
   Checkbox,
 } from '@mantine/core';
 import { EmptyState } from '../ui/EmptyState';
+import { uiTokens } from '../ui/uiTokens';
 import { IconSearch } from '@tabler/icons-react';
 import type { TablerIcon } from '@tabler/icons-react';
 
@@ -80,9 +81,29 @@ export function CommonTable<T extends { id?: string | number; tagCode?: string }
         <EmptyState icon={emptyIcon} title={emptyTitle} description="尝试调整搜索关键词或重置筛选条件" />
       ) : (
         <>
-          <Table.ScrollContainer minWidth={800}>
-            <Table verticalSpacing="md" highlightOnHover withRowBorders>
-              <Table.Thead style={{ backgroundColor: theme.colors.green[0] }}>
+          <Table.ScrollContainer
+            minWidth={800}
+            style={{
+              border: `1px solid ${uiTokens.colors.border}`,
+              borderRadius: theme.radius.md,
+              background: uiTokens.colors.panel,
+              boxShadow: uiTokens.shadow.panel,
+            }}
+          >
+            <Table
+              verticalSpacing="md"
+              highlightOnHover
+              withRowBorders
+              styles={{
+                tr: {
+                  transition: "background-color 0.18s ease",
+                },
+                tbody: {
+                  fontSize: 13,
+                },
+              }}
+            >
+              <Table.Thead style={{ backgroundColor: uiTokens.colors.panelSubtle }}>
                 <Table.Tr>
                   {selectable && (
                     <Table.Th style={{ width: 48 }}>
@@ -135,8 +156,6 @@ export function CommonTable<T extends { id?: string | number; tagCode?: string }
               value={page} 
               onChange={onPageChange} 
               color="green" 
-              size="sm"
-              radius="md"
               withEdges
               disabled={loading}
             />

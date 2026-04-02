@@ -12,7 +12,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 
-@Controller('api/file')
+@Controller('file')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class OssController {
   constructor(private readonly ossService: OssService) {}

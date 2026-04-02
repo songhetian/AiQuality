@@ -98,7 +98,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], KnowledgeController.prototype, "retry", null);
 exports.KnowledgeController = KnowledgeController = __decorate([
-    (0, common_1.Controller)('api/knowledge'),
+    (0, common_1.Controller)('knowledge'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [knowledge_service_1.KnowledgeService])
 ], KnowledgeController);

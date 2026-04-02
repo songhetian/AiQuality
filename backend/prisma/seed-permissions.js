@@ -1,5 +1,18 @@
+const path = require('path');
+require('dotenv').config({
+  path: path.resolve(__dirname, '../../.env'),
+});
+
 const { PrismaClient } = require('@prisma/client');
-const prisma = new PrismaClient();
+const { PrismaMariaDb } = require('@prisma/adapter-mariadb');
+
+if (!process.env.DATABASE_URL) {
+  throw new Error('环境变量 DATABASE_URL 未定义，请检查根目录 .env 文件。');
+}
+
+const prisma = new PrismaClient({
+  adapter: new PrismaMariaDb(process.env.DATABASE_URL),
+});
 
 async function main() {
   const permissions = [

@@ -6,7 +6,7 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 
-@Controller('api/platform')
+@Controller('platform')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class PlatformController {
   constructor(private readonly orgService: OrganizationService) {}
@@ -24,7 +24,7 @@ export class PlatformController {
   }
 }
 
-@Controller('api/dept')
+@Controller('dept')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class DeptController {
   constructor(private readonly orgService: OrganizationService) {}
@@ -42,7 +42,7 @@ export class DeptController {
   }
 }
 
-@Controller('api/shop')
+@Controller('shop')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class ShopController {
   constructor(private readonly orgService: OrganizationService) {}

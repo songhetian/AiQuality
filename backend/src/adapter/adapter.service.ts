@@ -1,4 +1,4 @@
-import { Injectable, Logger, Inject, forwardRef } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import axios from 'axios';
 import { get } from 'lodash';
@@ -50,7 +50,6 @@ export class AdapterService {
 
   constructor(
     private prisma: PrismaService,
-    @Inject(forwardRef(() => QualityService))
     private qualityService: QualityService,
     private keywordService: KeywordService,
   ) {}

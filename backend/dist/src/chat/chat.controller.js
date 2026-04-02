@@ -103,7 +103,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], ChatController.prototype, "createRecord", null);
 exports.ChatController = ChatController = __decorate([
-    (0, common_1.Controller)('api/chat'),
+    (0, common_1.Controller)('chat'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [chat_service_1.ChatService])
 ], ChatController);

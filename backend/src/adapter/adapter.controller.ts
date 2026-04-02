@@ -24,7 +24,7 @@ import {
   adapterUpsertSchema,
 } from './adapter.schemas';
 
-@Controller('api/adapter')
+@Controller('adapter')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class AdapterController {
   constructor(private readonly adapterService: AdapterService) {}

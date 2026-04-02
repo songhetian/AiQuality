@@ -26,11 +26,26 @@ let RedisService = RedisService_1 = class RedisService {
         this.configService = configService;
     }
     onModuleInit() {
+        const host = this.configService.get('REDIS_HOST') || '127.0.0.1';
+        const port = parseInt(this.configService.get('REDIS_PORT') || '6379', 10);
         this.client = new ioredis_1.default({
-            host: this.configService.get('REDIS_HOST') || '127.0.0.1',
-            port: parseInt(this.configService.get('REDIS_PORT') || '6379', 10),
+            host,
+            port,
             password: this.configService.get('REDIS_PASSWORD') || undefined,
             db: 0,
+            retryStrategy: (times) => {
+                const delay = Math.min(times * 100, 3000);
+                return delay;
+            },
+        });
+        this.client.on('connect', () => {
+            this.logger.log(`正在连接 Redis: ${host}:${port}...`);
+        });
+        this.client.on('ready', () => {
+            this.logger.log(`✅ Redis 连接成功: ${host}:${port}`);
+        });
+        this.client.on('error', (err) => {
+            this.logger.error(`❌ Redis 连接错误: ${err.message}`);
         });
     }
     onModuleDestroy() {

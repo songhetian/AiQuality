@@ -17,7 +17,7 @@ import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { Permissions } from '../auth/decorators/permissions.decorator';
 import { Throttle } from '@nestjs/throttler';
 
-@Controller('api/knowledge')
+@Controller('knowledge')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class KnowledgeController {
   private readonly allowedKnowledgeMimeTypes = [

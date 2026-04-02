@@ -46,7 +46,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], PermissionController.prototype, "sync", null);
 exports.PermissionController = PermissionController = __decorate([
-    (0, common_1.Controller)('api/permission'),
+    (0, common_1.Controller)('permission'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [permission_service_1.PermissionService])
 ], PermissionController);

@@ -23,7 +23,7 @@ type RequestUser = {
   deptId?: string | null;
 };
 
-@Controller('api/settings')
+@Controller('settings')
 @UseGuards(JwtAuthGuard, RolesGuard, PermissionsGuard)
 export class SettingsController {
   constructor(private readonly settingsService: SettingsService) {}

@@ -112,7 +112,7 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], CostController.prototype, "setBillingRule", null);
 exports.CostController = CostController = __decorate([
-    (0, common_1.Controller)('api/cost'),
+    (0, common_1.Controller)('cost'),
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard, roles_guard_1.RolesGuard, permissions_guard_1.PermissionsGuard),
     __metadata("design:paramtypes", [cost_service_1.CostService])
 ], CostController);
