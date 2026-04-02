@@ -41,3 +41,4 @@ prisma/migrations/*
 # notes-*.md
 # temp-*.md
 # draft-*.md
+backend/node_modules
